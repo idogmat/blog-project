@@ -1,29 +1,40 @@
-import axios from 'axios';
-import * as process from "process";
+import axios from "axios";
+import { IBlog } from "../store/slicers/blogsSlice";
+interface ILogin {
+  loginOrEmail: string;
+  password: string;
+}
 
 export const instance = axios.create({
-    baseURL: process.env.API,
-    withCredentials: true,
+  baseURL: process.env.REACT_APP_BACK_URL,
+  // withCredentials: true,
 });
-
-const authMe = () => {
+export const authAPI = {
+  authMe: () => {
     return instance.post("/auth/me", {});
-};
-// {
-//     "login": "xaxegi5153",
-//     "password": "Qwe123456",
-//     "email": "xaxegi5153@csoft.com"
-// }
-const register = () => {
+  },
+  // {
+  //     "login": "xaxegi5153",
+  //     "password": "Qwe123456",
+  //     "email": "xaxegi5153@csoft.com"
+  // }
+  register: () => {
     return instance.post("auth/registration", {});
-};
-// {
-//     "loginOrEmail": "string",
-//     "password": "string"
-// }
-const login = () => {
-    return instance.post("/auth/login", {});
-};
-const logout = () => {
+  },
+
+  login: (fields: { loginOrEmail: string; password: string }) => {
+    return instance.post("/auth/login", { fields });
+  },
+  logout: () => {
     return instance.post("/auth/logout", {});
+  },
+};
+export type IBlogAPI = Pick<IBlog, "name" | "description" | "websiteUrl">;
+export const blogsAPI = {
+  getBlogs: () => {
+    return instance.get("/blogs");
+  },
+  addBlog: (fields: IBlogAPI) => {
+    return instance.post("/blogs", fields);
+  },
 };

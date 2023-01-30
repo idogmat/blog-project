@@ -1,13 +1,19 @@
-import React from 'react';
-import './App.css';
-import {Routes} from "react-router-dom";
-import {AppRouter} from "./components/AppRouter";
+import React from "react";
+import "./App.scss";
+import { AppRouter } from "./components/AppRouter";
+import { Header } from "./components/Header";
+import { MainWrapper, PageWrapper } from "./ui/MainWrapper";
+import { NavMenu } from "./components/NavMenu/NavMenu";
 
 function App() {
   return (
-    <div className="App">
-      <AppRouter/>
-    </div>
+    <PageWrapper>
+      <Header />
+      <MainWrapper>
+        <NavMenu />
+        <AppRouter />
+      </MainWrapper>
+    </PageWrapper>
   );
 }
 
