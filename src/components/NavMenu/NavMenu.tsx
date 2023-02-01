@@ -9,7 +9,6 @@ export const NavMenu = () => {
   const { isAuth } = useAllSelector(authStateSelector);
   const unAuthPages = getRouteName(unAuthRoutes);
   const authPages = getRouteName(authRoutes);
-  console.log(authPages, unAuthPages);
   return (
     <Navigate>
       {isAuth

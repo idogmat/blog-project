@@ -1,22 +1,26 @@
 import { createAppAsyncThunk } from "../type";
-import { blogsAPI, IBlogAPI } from "../../api";
+import { blogsAPI, IBlogAPI, postsAPI } from "../../api";
 
-export const setBlogs = createAppAsyncThunk(
-  "blogs/setBlogs",
+export const setPosts = createAppAsyncThunk(
+  "blogs/setPosts",
   async (
-    params: { pageNumber: number; pageSize: number; sortDirection: string },
+    params: Partial<{
+      pageNumber: number;
+      pageSize: number;
+      sortDirection: string;
+    }>,
     thunkAPI
   ) => {
     if (params.sortDirection === "0") {
-      const { data } = await blogsAPI.getBlogs({
+      const { data } = await postsAPI.getPosts({
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
         sortBy: "createdAt",
       });
-      return { blogs: data.items };
+      return { posts: data.items };
     } else {
-      const { data } = await blogsAPI.getBlogs(params);
-      return { blogs: data.items };
+      const { data } = await postsAPI.getPosts(params);
+      return { posts: data.items };
     }
   }
 );

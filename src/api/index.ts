@@ -29,12 +29,23 @@ export const authAPI = {
     return instance.post("/auth/logout", {});
   },
 };
+interface ISetRequest {
+  pageNumber: number;
+  pageSize: number;
+  sortDirection: string;
+  sortBy: string;
+}
 export type IBlogAPI = Pick<IBlog, "name" | "description" | "websiteUrl">;
 export const blogsAPI = {
-  getBlogs: () => {
-    return instance.get("/blogs");
+  getBlogs: (params: Partial<ISetRequest>) => {
+    return instance.get("/blogs", { params });
   },
   addBlog: (fields: IBlogAPI) => {
     return instance.post("/blogs", fields);
+  },
+};
+export const postsAPI = {
+  getPosts: (params: Partial<ISetRequest>) => {
+    return instance.get("/posts", { params });
   },
 };

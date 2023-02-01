@@ -20,7 +20,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setBlogs.fulfilled, (state, action) => {
-      return action.payload.blogs;
+      return [...action.payload.blogs];
     });
     builder.addCase(addBlog.fulfilled, (state, action) => {
       return [action?.payload?.blog, ...state];

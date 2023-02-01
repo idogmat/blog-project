@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Flex } from "../../ui/Flex";
 import { Image } from "../../ui/Image";
 import { IBlog } from "../../store/slicers/blogsSlice";
@@ -8,7 +8,13 @@ import { Button } from "../../ui/Button";
 import { Dropdown } from "../../ui/Dropdown";
 import { useComponentVisible } from "../../utils/hooks/useComponentVisible";
 
-export const BlogsElement: React.FC<{ blog: IBlog }> = ({ blog }) => {
+export const BlogsElement: FC<IBlog> = ({
+  name,
+  description,
+  websiteUrl,
+  createdAt,
+  id,
+}) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   return (
@@ -21,12 +27,13 @@ export const BlogsElement: React.FC<{ blog: IBlog }> = ({ blog }) => {
         />
         <Flex fDirection={"column"} justify={"flex-start"} sx={{ gap: "1rem" }}>
           <Flex fDirection={"column"} justify={"center"}>
-            <Typography variant={"sub-title-md"}>{blog.name}</Typography>
+            <Typography variant={"sub-title-md"}>{name}</Typography>
             <Typography variant={"sub-title-sm"}>
-              Website:<a href={blog.websiteUrl}>{blog.websiteUrl}</a>
+              Website:<a href={websiteUrl}>{websiteUrl}</a>
+              {createdAt}
             </Typography>
           </Flex>
-          <Typography variant={"sub-title-sm"}>{blog.description}</Typography>
+          <Typography variant={"sub-title-sm"}>{description}</Typography>
         </Flex>
       </Flex>
       <Button ref={ref} onClick={() => setIsComponentVisible(true)} semantic>
@@ -35,8 +42,8 @@ export const BlogsElement: React.FC<{ blog: IBlog }> = ({ blog }) => {
           posSettings={{ bottom: "50%", right: "0px" }}
           open={isComponentVisible}
         >
-          <Button>Edit</Button>
-          <Button>Delete</Button>
+          <Typography>Edit</Typography>
+          <Typography>Delete</Typography>
         </Dropdown>
       </Button>
     </Flex>
