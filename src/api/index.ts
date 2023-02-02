@@ -34,6 +34,7 @@ interface ISetRequest {
   pageSize: number;
   sortDirection: string;
   sortBy: string;
+  searchNameTerm: string;
 }
 export type IBlogAPI = Pick<IBlog, "name" | "description" | "websiteUrl">;
 export const blogsAPI = {

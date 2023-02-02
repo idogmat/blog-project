@@ -13,7 +13,6 @@ const InputWrapper = styled.div<IInputLabel>`
   justify-content: space-between;
   align-items: flex-end;
   gap: 0.3125rem;
-
   border-bottom: 1px solid;
   border-bottom-color: ${({ active }) =>
     active ? "var(--color-darker-blue)" : "var(--color-blue)"};

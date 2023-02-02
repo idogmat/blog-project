@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ContentForm } from "../../ui/ContentForm";
 import { Flex } from "../../ui/Flex";
 import { Typography } from "../../ui/Typography";
@@ -9,11 +9,16 @@ import { blogsStateSelector } from "../../store/selectors";
 import { BlogsElement } from "./BlogsElement";
 import { Search } from "../../ui/Search";
 import { Select } from "../../ui/Selector";
+import { useDebounce } from "../../utils/hooks/useDebounce";
+import { Route, Routes, useParams } from "react-router-dom";
+import { LayoutCurrenBlog } from "./LayoutCurrenBlog";
+
 type SortType = "0" | "asc" | "desc";
 interface IFetchType {
   pageNumber: number;
   pageSize: number;
   sortDirection: SortType;
+  searchNameTerm: string;
 }
 export const selectOptions = {
   ["0"]: "Old blogs first",
@@ -29,14 +34,26 @@ export const Blogs = () => {
     pageNumber: 1,
     pageSize: 10,
     sortDirection: "0",
+    searchNameTerm: search,
   });
+  const { id } = useParams();
+  console.log(id);
+  const setSearchOnFetch = useDebounce(
+    (e) => setPageAndSize((state) => ({ ...state, searchNameTerm: e })),
+    700
+  );
+  const searchWithDelay = (e: string) => {
+    setSearch(e);
+    setSearchOnFetch(e);
+  };
+
   const setSort = (o: SortType) => {
     setPageAndSize((state) => ({ ...state, sortDirection: o }));
   };
-  const ref = useRef();
   useEffect(() => {
     dispatch(setBlogs(pageAndSize));
   }, [pageAndSize]);
+
   return (
     <ContentForm fDirection={"column"} bgColor={"#faf7f8"}>
       <Flex
@@ -45,18 +62,22 @@ export const Blogs = () => {
       >
         <Typography variant={"title"}>Blogs</Typography>
       </Flex>
-      <Flex>
-        <Search value={search} onChange={setSearch} />
-        <Select
-          onChange={setSort}
-          selected={pageAndSize.sortDirection}
-          options={selectOptions}
-        />
-      </Flex>
-      <Flex fDirection={"row"} justify={"end"}>
-        <Button>Add blog</Button>
-      </Flex>
-      <Flex fDirection={"column"}>
+      {id ? (
+        <LayoutCurrenBlog id={id} />
+      ) : (
+        <Flex>
+          <Search value={search} onChange={searchWithDelay} />
+          <Select
+            onChange={setSort}
+            selected={pageAndSize.sortDirection}
+            options={selectOptions}
+          />
+        </Flex>
+      )}
+      {/*<Flex fDirection={"row"} justify={"end"}>*/}
+      {/*  <Button>Add blog</Button>*/}
+      {/*</Flex>*/}
+      <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
         {blogs.map((b) => {
           return <BlogsElement key={b.id} {...b} />;
         })}

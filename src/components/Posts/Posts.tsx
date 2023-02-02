@@ -23,17 +23,18 @@ export const Posts = () => {
       >
         <Typography variant={"title"}>Posts</Typography>
       </Flex>
-      <Flex>
-        {/*<Search value={search} onChange={setSearch} />*/}
-        {/*<Select*/}
-        {/*  onChange={setSort}*/}
-        {/*  selected={pageAndSize.sortDirection}*/}
-        {/*  options={selectOptions}*/}
-        {/*/>*/}
-      </Flex>
-      <Flex fDirection={"row"}>
-        <Button>Add Post</Button>
-      </Flex>
+      {/*<Flex>*/}
+      {/*<Search value={search} onChange={setSearch} />*/}
+      {/*<Select*/}
+      {/*  onChange={setSort}*/}
+      {/*  selected={pageAndSize.sortDirection}*/}
+      {/*  options={selectOptions}*/}
+      {/*/>*/}
+      {/*</Flex>*/}
+      {/*<Flex fDirection={"row"}>*/}
+      {/*  <Button>Add Post</Button>*/}
+      {/*</Flex>*/}
+
       <Flex fDirection={"row"} fWrap={"wrap"}>
         {posts.map((p) => {
           return <PostElement key={p.id} {...p} />;

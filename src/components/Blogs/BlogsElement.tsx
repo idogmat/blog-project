@@ -7,6 +7,8 @@ import { BiDotsVertical } from "react-icons/bi";
 import { Button } from "../../ui/Button";
 import { Dropdown } from "../../ui/Dropdown";
 import { useComponentVisible } from "../../utils/hooks/useComponentVisible";
+import { NavLink } from "react-router-dom";
+import { setItemToLC } from "../../utils/localStorage";
 
 export const BlogsElement: FC<IBlog> = ({
   name,
@@ -17,6 +19,14 @@ export const BlogsElement: FC<IBlog> = ({
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+  // const savePackData = () => {
+  //   setItemToLC("backToState", {name,
+  //     description,
+  //     websiteUrl,
+  //     createdAt,
+  //     id,});
+  // };
+  const backToState = { name, description, websiteUrl, createdAt, id };
   return (
     <Flex fDirection={"row"} justify={"space-between"}>
       <Flex sx={{ gap: "1rem" }}>
@@ -27,7 +37,10 @@ export const BlogsElement: FC<IBlog> = ({
         />
         <Flex fDirection={"column"} justify={"flex-start"} sx={{ gap: "1rem" }}>
           <Flex fDirection={"column"} justify={"center"}>
-            <Typography variant={"sub-title-md"}>{name}</Typography>
+            <NavLink to={`${id}`} state={{ backToState }}>
+              <Typography variant={"sub-title-md"}>{name}</Typography>
+            </NavLink>
+
             <Typography variant={"sub-title-sm"}>
               Website:<a href={websiteUrl}>{websiteUrl}</a>
               {createdAt}

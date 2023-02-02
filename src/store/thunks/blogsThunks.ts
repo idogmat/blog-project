@@ -4,11 +4,17 @@ import { blogsAPI, IBlogAPI } from "../../api";
 export const setBlogs = createAppAsyncThunk(
   "blogs/setBlogs",
   async (
-    params: { pageNumber: number; pageSize: number; sortDirection: string },
+    params: {
+      pageNumber: number;
+      pageSize: number;
+      sortDirection: string;
+      searchNameTerm: string;
+    },
     thunkAPI
   ) => {
     if (params.sortDirection === "0") {
       const { data } = await blogsAPI.getBlogs({
+        ...params,
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
         sortBy: "createdAt",

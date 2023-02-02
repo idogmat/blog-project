@@ -2,68 +2,46 @@ import { FC } from "react";
 import { Blogs } from "../../components/Blogs/Blogs";
 import { Login } from "../../components/Login";
 import { Posts } from "../../components/Posts/Posts";
+import { LayoutCurrenPost } from "../../components/Posts/LayoutCurrenPost";
 
 export interface IRoute {
   path: string;
   component: FC;
-  isPage: boolean;
+  isLayout: boolean;
 }
 export enum RoutesEnum {
-  LOGIN = "/login",
+  LOGIN = "login",
   REGISTER = "/register",
-  BLOGS = "/blogs",
-  BLOG = "/blogs/:id",
-  POSTS = "/posts",
-  POST = "/posts/:id",
+  BLOGS = "blogs",
+  BLOG = "blogs/:id",
+  POSTS = "posts",
+  POST = "posts/:id",
 }
 
-export const authRoutes: IRoute[] = [
-  {
-    path: RoutesEnum.BLOGS,
-    component: Blogs,
-    isPage: false,
-  },
-  // {
-  //     path: RoutesEnum.BLOG,
-  //     component: Packs,
-  //     isPage: true,
-  // },
-  // {
-  //     path: RoutesEnum.POSTS,
-  //     component: Cards,
-  //     isPage: false,
-  // },
-  // {
-  //     path: RoutesEnum.POST,
-  //     component: Learn,
-  //     isPage: false,
-  // },
-];
-
-export const unAuthRoutes: IRoute[] = [
+export const RoutePaths: IRoute[] = [
   {
     path: RoutesEnum.LOGIN,
     component: Login,
-    isPage: true,
+    isLayout: true,
   },
   {
     path: RoutesEnum.BLOGS,
     component: Blogs,
-    isPage: true,
+    isLayout: true,
   },
   {
     path: RoutesEnum.POSTS,
     component: Posts,
-    isPage: true,
+    isLayout: true,
   },
-  // {
-  //     path: RoutesEnum.REGISTER,
-  //     component: Register,
-  //     isPage: true,
-  // },
+  {
+    path: RoutesEnum.BLOG,
+    component: Blogs,
+    isLayout: false,
+  },
+  {
+    path: RoutesEnum.POST,
+    component: LayoutCurrenPost,
+    isLayout: false,
+  },
 ];
-export const getRouteName = (routes: IRoute[]) => {
-  return routes
-    .filter((route) => route.isPage)
-    .map((route) => route.path.slice(1));
-};
