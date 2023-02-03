@@ -4,14 +4,15 @@ import { Flex } from "../../ui/Flex";
 import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { setBlogs } from "../../store/thunks/blogsThunks";
-import { blogsStateSelector } from "../../store/selectors";
+import { loadNewBlogs, setBlogs } from "../../store/thunks/blogsThunks";
+import { appStateSelector, blogsStateSelector } from "../../store/selectors";
 import { BlogsElement } from "./BlogsElement";
 import { Search } from "../../ui/Search";
 import { Select } from "../../ui/Selector";
 import { useDebounce } from "../../utils/hooks/useDebounce";
 import { Route, Routes, useParams } from "react-router-dom";
 import { LayoutCurrenBlog } from "./LayoutCurrenBlog";
+import { Preloader } from "../../ui/Preloader";
 
 type SortType = "0" | "asc" | "desc";
 interface IFetchType {
@@ -27,17 +28,35 @@ export const selectOptions = {
 };
 export const Blogs = () => {
   const dispatch = useAppDispatch();
-  const blogs = useAllSelector(blogsStateSelector);
+  const { items, totalCount, pagesCount, page, pageSize } =
+    useAllSelector(blogsStateSelector);
+  const { isLoading } = useAllSelector(appStateSelector);
   const [search, setSearch] = useState<string>("");
   // const [sort, setSort] = useState<any>(selectOptions[0].UIValue);
   const [pageAndSize, setPageAndSize] = useState<IFetchType>({
-    pageNumber: 1,
-    pageSize: 10,
+    pageNumber: page,
+    pageSize: pageSize,
     sortDirection: "0",
     searchNameTerm: search,
   });
+  const checkSize =
+    page + 1 === pageSize ? totalCount - items.length : pageSize;
+  useEffect(() => {
+    dispatch(setBlogs(pageAndSize));
+  }, [pageAndSize]);
   const { id } = useParams();
-  console.log(id);
+
+  const HandlerLoadNewBlogs = () => {
+    if (checkSize && pagesCount !== page + 1) {
+      dispatch(
+        loadNewBlogs({
+          ...pageAndSize,
+          pageNumber: page + 1,
+          pageSize: checkSize,
+        })
+      );
+    }
+  };
   const setSearchOnFetch = useDebounce(
     (e) => setPageAndSize((state) => ({ ...state, searchNameTerm: e })),
     700
@@ -50,48 +69,47 @@ export const Blogs = () => {
   const setSort = (o: SortType) => {
     setPageAndSize((state) => ({ ...state, sortDirection: o }));
   };
-  useEffect(() => {
-    dispatch(setBlogs(pageAndSize));
-  }, [pageAndSize]);
 
   return (
     <ContentForm fDirection={"column"} bgColor={"#faf7f8"}>
-      <Flex
-        fDirection={"column"}
-        sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
-      >
-        <Typography variant={"title"}>Blogs</Typography>
-      </Flex>
-      {id ? (
-        <LayoutCurrenBlog id={id} />
+      {isLoading ? (
+        <Preloader />
       ) : (
-        <Flex>
-          <Search value={search} onChange={searchWithDelay} />
-          <Select
-            onChange={setSort}
-            selected={pageAndSize.sortDirection}
-            options={selectOptions}
-          />
-        </Flex>
+        <>
+          <Flex
+            fDirection={"column"}
+            sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
+          >
+            <Typography variant={"title"}>Blogs</Typography>
+          </Flex>
+          {id ? (
+            <LayoutCurrenBlog id={id} />
+          ) : (
+            <Flex>
+              <Search value={search} onChange={searchWithDelay} />
+              <Select
+                onChange={setSort}
+                selected={pageAndSize.sortDirection}
+                options={selectOptions}
+              />
+            </Flex>
+          )}
+          {/*<Flex fDirection={"row"} justify={"end"}>*/}
+          {/*  <Button>Add blog</Button>*/}
+          {/*</Flex>*/}
+          <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
+            {items.map((b) => {
+              return <BlogsElement key={b.id} {...b} />;
+            })}
+          </Flex>
+          <Button
+            disabled={!(checkSize && pagesCount !== page + 1)}
+            onClick={HandlerLoadNewBlogs}
+          >
+            ShowMore
+          </Button>
+        </>
       )}
-      {/*<Flex fDirection={"row"} justify={"end"}>*/}
-      {/*  <Button>Add blog</Button>*/}
-      {/*</Flex>*/}
-      <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
-        {blogs.map((b) => {
-          return <BlogsElement key={b.id} {...b} />;
-        })}
-      </Flex>
-      <Button
-        onClick={() =>
-          setPageAndSize((state) => ({
-            ...state,
-            pageNumber: state.pageNumber + 1,
-          }))
-        }
-      >
-        ShowMore
-      </Button>
     </ContentForm>
   );
 };

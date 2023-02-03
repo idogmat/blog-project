@@ -4,6 +4,6 @@ export const Navigate = styled.ul`
   display: flex;
   flex-direction: column;
   padding-top: 15px;
-  height: 40px;
+  height: 80px;
   width: 250px;
 `;

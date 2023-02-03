@@ -20,11 +20,6 @@ export enum RoutesEnum {
 
 export const RoutePaths: IRoute[] = [
   {
-    path: RoutesEnum.LOGIN,
-    component: Login,
-    isLayout: true,
-  },
-  {
     path: RoutesEnum.BLOGS,
     component: Blogs,
     isLayout: true,
@@ -34,6 +29,12 @@ export const RoutePaths: IRoute[] = [
     component: Posts,
     isLayout: true,
   },
+  {
+    path: RoutesEnum.LOGIN,
+    component: Login,
+    isLayout: false,
+  },
+
   {
     path: RoutesEnum.BLOG,
     component: Blogs,
@@ -45,3 +46,4 @@ export const RoutePaths: IRoute[] = [
     isLayout: false,
   },
 ];
+export const filterLinks = RoutePaths.filter((e) => e.isLayout);

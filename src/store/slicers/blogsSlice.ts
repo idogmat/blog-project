@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { addBlog, setBlogs } from "../thunks/blogsThunks";
+import { addBlog, loadNewBlogs, setBlogs } from "../thunks/blogsThunks";
 
 export interface IBlog {
   id: string;
@@ -8,22 +8,47 @@ export interface IBlog {
   name: string;
   createdAt: string;
 }
-const initialState: IBlog[] = [];
+interface IState {
+  page: number;
+  pageSize: number;
+  pagesCount: number;
+  totalCount: number;
+  items: IBlog[];
+}
+const initialState: IState = {
+  page: 1,
+  pageSize: 10,
+  pagesCount: 4,
+  totalCount: 33,
+  items: [],
+};
 
 const authSlice = createSlice({
   name: "blogs",
   initialState,
   reducers: {
-    setBlogs: (state, action: PayloadAction<{ blogs: IBlog[] }>) => {
-      return action.payload.blogs;
+    setBlogs: (state, action) => {
+      return action.payload.data;
+    },
+    setPageBlogs: (state, action) => {
+      state.page = action.payload.page;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(setBlogs.fulfilled, (state, action) => {
-      return [...action.payload.blogs];
+      return { ...action.payload.data };
+    });
+    builder.addCase(loadNewBlogs.fulfilled, (state, action) => {
+      return {
+        ...action.payload.data,
+        items: [...state.items, ...action.payload.data.items],
+      };
     });
     builder.addCase(addBlog.fulfilled, (state, action) => {
-      return [action?.payload?.blog, ...state];
+      return {
+        ...state,
+        items: [...action?.payload?.data.items, ...state.items],
+      };
     });
     //     .addCase(logOutTC.fulfilled, (state, action) => {
     //         state.isAuth = false;

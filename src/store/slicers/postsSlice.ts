@@ -10,25 +10,35 @@ export interface IPost {
   blogName: string;
   createdAt: string;
 }
-const initialState = {
+interface IState {
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: IPost[];
+}
+const initialState: IState = {
   pagesCount: 1,
   page: 1,
   pageSize: 10,
   totalCount: 1,
-  items: [] as IPost[],
+  items: [],
 };
 
 const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    setPosts: (state, action: PayloadAction<{ posts: IPost[] }>) => {
-      state.items = action.payload.posts;
+    setPosts: (state, action) => {
+      return action.payload.data.items;
+    },
+    setPagePosts: (state, action) => {
+      state.page = action.payload.page;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(setPosts.fulfilled, (state, action) => {
-      state.items = action.payload.posts;
+      state.items = action.payload.data.items;
     });
     // builder.addCase(addBlog.fulfilled, (state, action) => {
     //   return [action?.payload?.blog, ...state];

@@ -14,7 +14,7 @@ export const AppRouter = () => {
             />
           );
         })}
-        <Route path={"/*"} element={<Navigate to={RoutesEnum.BLOGS} />} />
+        <Route path={"/*"} element={<Navigate to={RoutesEnum.LOGIN} />} />
       </>
     </Routes>
   );
