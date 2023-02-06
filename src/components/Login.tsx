@@ -16,10 +16,10 @@ import { Paper } from "../ui/Paper";
 import { Typography } from "../ui/Typography";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import loginImg from "../assets/svg/login.svg";
 
 export const basicSchema = yup.object().shape({
-  email: yup.string().email("Enter valid Email").required("Required"),
-  password: yup.string().min(8, "Password is too short").required("Required"),
+  password: yup.string().min(5, "Password is too short").required("Required"),
 });
 export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
@@ -56,13 +56,14 @@ export const Login = () => {
   // Utils
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
   return (
-    <LoginWrapper>
+    <LoginWrapper sx={{ margin: "auto" }}>
       <LoginContent>
         {/*{isLoading && (*/}
         {/*  <div className={styles.preventSending}>*/}
         {/*    <Preloader />*/}
         {/*  </div>*/}
         {/*)}*/}
+
         <Paper sx={{ padding: "35px" }}>
           <Typography
             variant={"title"}
@@ -101,27 +102,30 @@ export const Login = () => {
               }
             ></Input>
             <Typography
-              sx={{ fontSize: "16px", color: "#366EFF", textAlign: "end" }}
+              sx={{ fontSize: "16px", color: "#F8346B", textAlign: "end" }}
             >
               <Link to={"/recovery"}>Forgot Password?</Link>
             </Typography>
             <Button
               type={"submit"}
+              bColor={"#fff"}
               disabled={loginHasError("email") || loginHasError("password")}
             >
               Sign in
             </Button>
+
             <LoginOffer>
               <Typography variant={"sub-title-md"} as={"span"}>
                 Haven't account?
               </Typography>
-              <Typography sx={{ fontSize: "16px", color: "#366EFF" }}>
+              <Typography sx={{ fontSize: "16px", color: "#F8346B" }}>
                 <Link to={"/register"}>Sign up</Link>
               </Typography>
             </LoginOffer>
           </LoginForm>
         </Paper>
       </LoginContent>
+      <img src={loginImg} alt="" />
     </LoginWrapper>
   );
 };

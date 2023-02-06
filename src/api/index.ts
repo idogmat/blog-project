@@ -10,20 +10,25 @@ export const instance = axios.create({
   // withCredentials: true,
 });
 export const authAPI = {
-  authMe: () => {
-    return instance.post("/auth/me", {});
+  authMe: (accessToken: string) => {
+    return axios.get(process.env.REACT_APP_BACK_URL + "auth/me", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   },
-  // {
-  //     "login": "xaxegi5153",
-  //     "password": "Qwe123456",
-  //     "email": "xaxegi5153@csoft.com"
-  // }
+  refreshToken: (accessToken: string) => {
+    return axios.post(
+      process.env.REACT_APP_BACK_URL + "auth/refresh-token",
+      {}
+    );
+  },
   register: () => {
     return instance.post("auth/registration", {});
   },
 
-  login: (fields: { loginOrEmail: string; password: string }) => {
-    return instance.post("/auth/login", { fields });
+  login: (fields: ILogin) => {
+    return instance.post("/auth/login", fields);
   },
   logout: () => {
     return instance.post("/auth/logout", {});

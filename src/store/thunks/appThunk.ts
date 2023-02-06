@@ -5,7 +5,8 @@ import { AppAC } from "../slicers/appSlice";
 export const initializeApp = createAppAsyncThunk(
   "app/init",
   async (_, thunkAPI) => {
-    await thunkAPI.dispatch(authMe());
+    const accessToken = thunkAPI.getState().auth.accessToken;
+    accessToken && thunkAPI.dispatch(authMe({ accessToken }));
     return { isInit: true };
   }
 );

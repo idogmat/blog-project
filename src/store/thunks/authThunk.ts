@@ -8,8 +8,8 @@ export interface IUserFields {
 }
 export const authMe = createAppAsyncThunk(
   "auth/authMe",
-  async (_, thunkAPI) => {
-    const { data } = await authAPI.authMe();
+  async (param: { accessToken: string }, thunkAPI) => {
+    const { data } = await authAPI.authMe(param.accessToken);
     return data;
   }
 );
@@ -17,12 +17,13 @@ export const login = createAppAsyncThunk(
   "auth/login",
   async (fields: IUserFields, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
-      const res = await authAPI.login(fields);
-      const { error, ...user } = res.data;
+      const { data } = await authAPI.login(fields);
+      const { error, accessToken } = data;
       thunkAPI.dispatch(
         AppAC.setSuccessMessage({ message: "You have successfully authorized" })
       );
-      return { user };
+      thunkAPI.dispatch(authMe({ accessToken }));
+      return { accessToken };
     });
   }
 );

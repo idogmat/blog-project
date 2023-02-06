@@ -3,7 +3,7 @@ import { Flex } from "./Flex";
 import { StyledComponent } from "./type";
 
 export const LoginWrapper = styled(Flex).attrs({
-  fDirection: "column",
+  fDirection: "row",
   align: "center",
   justify: "center",
 })`
@@ -12,6 +12,7 @@ export const LoginWrapper = styled(Flex).attrs({
   @media (max-width: 768px) {
     padding-bottom: 5vh;
   }
+  ${(sx) => ({ ...sx.sx })}
 `;
 export const LoginContent = styled(Flex).attrs<StyledComponent<{}>>({
   fDirection: "column",
