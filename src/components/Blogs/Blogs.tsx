@@ -5,7 +5,11 @@ import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
 import { loadNewBlogs, setBlogs } from "../../store/thunks/blogsThunks";
-import { appStateSelector, blogsStateSelector } from "../../store/selectors";
+import {
+  appStateSelector,
+  authStateSelector,
+  blogsStateSelector,
+} from "../../store/selectors";
 import { BlogsElement } from "./BlogsElement";
 import { Search } from "../../ui/Search";
 import { Select } from "../../ui/Selector";
@@ -13,6 +17,9 @@ import { useDebounce } from "../../utils/hooks/useDebounce";
 import { Route, Routes, useParams } from "react-router-dom";
 import { LayoutCurrenBlog } from "./LayoutCurrenBlog";
 import { Preloader } from "../../ui/Preloader";
+import { Modal } from "../../ui/Modal/Modal";
+import { ModalBase } from "../../ui/Modal/ModalBase";
+import { AddNewBlog } from "./Modals/AddNewBlog";
 
 type SortType = "0" | "asc" | "desc";
 interface IFetchType {
@@ -28,9 +35,12 @@ export const selectOptions = {
 };
 export const Blogs = () => {
   const dispatch = useAppDispatch();
+  const [open, setModal] = useState(false);
   const { items, totalCount, pagesCount, page, pageSize } =
     useAllSelector(blogsStateSelector);
   const { isLoading } = useAllSelector(appStateSelector);
+  const { isAdmin } = useAllSelector(authStateSelector);
+
   const [search, setSearch] = useState<string>("");
   // const [sort, setSort] = useState<any>(selectOptions[0].UIValue);
   const [pageAndSize, setPageAndSize] = useState<IFetchType>({
@@ -45,7 +55,9 @@ export const Blogs = () => {
     dispatch(setBlogs(pageAndSize));
   }, [pageAndSize]);
   const { id } = useParams();
-
+  const handleOpenModal = () => {
+    setModal((modal) => !modal);
+  };
   const HandlerLoadNewBlogs = () => {
     if (checkSize && pagesCount !== page + 1) {
       dispatch(
@@ -82,21 +94,20 @@ export const Blogs = () => {
           >
             <Typography variant={"title"}>Blogs</Typography>
           </Flex>
-          {id ? (
-            <LayoutCurrenBlog id={id} />
-          ) : (
-            <Flex>
-              <Search value={search} onChange={searchWithDelay} />
-              <Select
-                onChange={setSort}
-                selected={pageAndSize.sortDirection}
-                options={selectOptions}
-              />
-            </Flex>
-          )}
-          {/*<Flex fDirection={"row"} justify={"end"}>*/}
-          {/*  <Button>Add blog</Button>*/}
-          {/*</Flex>*/}
+          <Flex>
+            <AddNewBlog isOpen={open} handleClose={() => setModal(false)} />
+            <Search value={search} onChange={searchWithDelay} />
+            <Select
+              onChange={setSort}
+              selected={pageAndSize.sortDirection}
+              options={selectOptions}
+            />
+            {isAdmin && (
+              <Flex fDirection={"row"} justify={"end"}>
+                <Button onClick={handleOpenModal}>Add blog</Button>
+              </Flex>
+            )}
+          </Flex>
           <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
             {items.map((b) => {
               return <BlogsElement key={b.id} {...b} />;

@@ -3,6 +3,7 @@ import { authMe, login } from "../thunks/authThunk";
 
 export interface IAuthState {
   isAuth: boolean;
+  isAdmin: boolean;
   accessToken: string | null;
   user: {
     login: string;
@@ -14,6 +15,7 @@ const initialState: IAuthState = {
   isAuth: false,
   user: null,
   accessToken: null,
+  isAdmin: true,
 };
 
 const authSlice = createSlice({

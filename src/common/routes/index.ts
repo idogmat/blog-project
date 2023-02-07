@@ -3,6 +3,7 @@ import { Blogs } from "../../components/Blogs/Blogs";
 import { Login } from "../../components/Login";
 import { Posts } from "../../components/Posts/Posts";
 import { LayoutCurrenPost } from "../../components/Posts/LayoutCurrenPost";
+import { LayoutCurrenBlog } from "../../components/Blogs/LayoutCurrenBlog";
 
 export interface IRoute {
   path: string;
@@ -37,7 +38,7 @@ export const RoutePaths: IRoute[] = [
 
   {
     path: RoutesEnum.BLOG,
-    component: Blogs,
+    component: LayoutCurrenBlog,
     isLayout: false,
   },
   {
