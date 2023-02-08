@@ -8,6 +8,7 @@ import { useAllSelector } from "./utils/hooks";
 import { authStateSelector } from "./store/selectors";
 import { useNavigate } from "react-router-dom";
 import { RoutesEnum } from "./common/routes";
+import { authAPI } from "./api";
 
 function App() {
   const { accessToken, isLogged } = useAllSelector(authStateSelector);
@@ -16,7 +17,7 @@ function App() {
     // console.log(accessToken);
     // document.cookie = `refreshToken=${accessToken}`;
     // accessToken && authAPI.refreshToken(accessToken);
-
+    // accessToken && authAPI.refreshToken(accessToken);
     isLogged && navigate("/" + RoutesEnum.BLOGS);
     !isLogged && navigate("/" + RoutesEnum.LOGIN);
   }, [accessToken, isLogged]);

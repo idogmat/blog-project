@@ -12,7 +12,7 @@ export const AdminInstance = axios.create({
 });
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_BACK_URL,
-  // withCredentials: true,
+  withCredentials: true,
 });
 export const authAPI = {
   authMe: (accessToken: string) => {
