@@ -6,17 +6,19 @@ import {
   LoginWrapper,
 } from "../ui/LoginForm";
 import { useAllSelector, useAppDispatch } from "../utils/hooks";
-import { appStateSelector } from "../store/selectors";
+import { appStateSelector, authStateSelector } from "../store/selectors";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
 import { login } from "../store/thunks/authThunk";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Paper } from "../ui/Paper";
 import { Typography } from "../ui/Typography";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import loginImg from "../assets/svg/login.svg";
+import { RoutePaths, RoutesEnum } from "../common/routes";
+import { withAuthentication } from "../common/routes/hoc";
 
 export const basicSchema = yup.object().shape({
   password: yup.string().min(5, "Password is too short").required("Required"),
@@ -32,13 +34,12 @@ interface IFields {
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
-  const { isLoading } = useAllSelector(appStateSelector);
-
   // Local State
+  const { isLogged } = useAllSelector(authStateSelector);
   const [showPassword, setShowPassword] = useState(false);
   const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
-
+  const navigate = useNavigate();
   const loginForm = useFormik({
     initialValues: {
       loginOrEmail: "",
@@ -55,77 +56,84 @@ export const Login = () => {
 
   // Utils
   const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+
   return (
-    <LoginWrapper sx={{ margin: "auto" }}>
-      <LoginContent>
-        {/*{isLoading && (*/}
-        {/*  <div className={styles.preventSending}>*/}
-        {/*    <Preloader />*/}
-        {/*  </div>*/}
-        {/*)}*/}
+    <>
+      {isLogged ? (
+        <Navigate to={"/" + RoutesEnum.BLOGS} />
+      ) : (
+        <LoginWrapper sx={{ margin: "auto" }}>
+          <LoginContent>
+            {/*{isLoading && (*/}
+            {/*  <div className={styles.preventSending}>*/}
+            {/*    <Preloader />*/}
+            {/*  </div>*/}
+            {/*)}*/}
 
-        <Paper sx={{ padding: "35px" }}>
-          <Typography
-            variant={"title"}
-            sx={{ textAlign: "center", marginBottom: "0.6rem" }}
-          >
-            Sign in
-          </Typography>
-          <LoginForm onSubmit={loginForm.handleSubmit}>
-            <Input
-              type={"text"}
-              error={loginHasError("loginOrEmail")}
-              label={
-                loginHasError("loginOrEmail")
-                  ? loginForm.errors.loginOrEmail
-                  : "Email or Login"
-              }
-              {...loginForm.getFieldProps("loginOrEmail")}
-            ></Input>
-            <Input
-              type={showPassword ? "text" : "password"}
-              error={loginHasError("password")}
-              label={
-                loginHasError("password")
-                  ? loginForm.errors.password
-                  : "Password"
-              }
-              {...loginForm.getFieldProps("password")}
-              endItem={
-                <Button
-                  type="button"
-                  semantic
-                  onClick={changePasswordFieldType}
+            <Paper sx={{ padding: "35px" }}>
+              <Typography
+                variant={"title"}
+                sx={{ textAlign: "center", marginBottom: "0.6rem" }}
+              >
+                Sign in
+              </Typography>
+              <LoginForm onSubmit={loginForm.handleSubmit}>
+                <Input
+                  type={"text"}
+                  error={loginHasError("loginOrEmail")}
+                  label={
+                    loginHasError("loginOrEmail")
+                      ? loginForm.errors.loginOrEmail
+                      : "Email or Login"
+                  }
+                  {...loginForm.getFieldProps("loginOrEmail")}
+                ></Input>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  error={loginHasError("password")}
+                  label={
+                    loginHasError("password")
+                      ? loginForm.errors.password
+                      : "Password"
+                  }
+                  {...loginForm.getFieldProps("password")}
+                  endItem={
+                    <Button
+                      type="button"
+                      semantic
+                      onClick={changePasswordFieldType}
+                    >
+                      {passwordIcon}
+                    </Button>
+                  }
+                ></Input>
+                <Typography
+                  sx={{ fontSize: "16px", color: "#F8346B", textAlign: "end" }}
                 >
-                  {passwordIcon}
+                  <Link to={"/recovery"}>Forgot Password?</Link>
+                </Typography>
+                <Button
+                  type={"submit"}
+                  bColor={"#fff"}
+                  disabled={loginHasError("email") || loginHasError("password")}
+                >
+                  Sign in
                 </Button>
-              }
-            ></Input>
-            <Typography
-              sx={{ fontSize: "16px", color: "#F8346B", textAlign: "end" }}
-            >
-              <Link to={"/recovery"}>Forgot Password?</Link>
-            </Typography>
-            <Button
-              type={"submit"}
-              bColor={"#fff"}
-              disabled={loginHasError("email") || loginHasError("password")}
-            >
-              Sign in
-            </Button>
 
-            <LoginOffer>
-              <Typography variant={"sub-title-md"} as={"span"}>
-                Haven't account?
-              </Typography>
-              <Typography sx={{ fontSize: "16px", color: "#F8346B" }}>
-                <Link to={"/register"}>Sign up</Link>
-              </Typography>
-            </LoginOffer>
-          </LoginForm>
-        </Paper>
-      </LoginContent>
-      <img src={loginImg} alt="" />
-    </LoginWrapper>
+                <LoginOffer>
+                  <Typography variant={"sub-title-md"} as={"span"}>
+                    Haven't account?
+                  </Typography>
+                  <Typography sx={{ fontSize: "16px", color: "#F8346B" }}>
+                    <Link to={"/register"}>Sign up</Link>
+                  </Typography>
+                </LoginOffer>
+              </LoginForm>
+            </Paper>
+          </LoginContent>
+          <img src={loginImg} alt="" />
+        </LoginWrapper>
+      )}
+    </>
   );
 };

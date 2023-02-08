@@ -5,6 +5,7 @@ export interface IAuthState {
   isAuth: boolean;
   isAdmin: boolean;
   accessToken: string | null;
+  isLogged: boolean;
   user: {
     login: string;
     email: string;
@@ -16,6 +17,7 @@ const initialState: IAuthState = {
   user: null,
   accessToken: null,
   isAdmin: true,
+  isLogged: false,
 };
 
 const authSlice = createSlice({
@@ -26,6 +28,7 @@ const authSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
+        state.isLogged = true;
       })
       .addCase(authMe.fulfilled, (state, action) => {
         state.isAuth = true;

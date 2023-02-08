@@ -2,10 +2,14 @@ import React from "react";
 import { HeaderWrapper } from "../ui/HeaderWrapper";
 import { Flex } from "../ui/Flex";
 import { Button } from "../ui/Button";
-import { FiLogOut } from "react-icons/fi";
+import { RiLogoutBoxRFill } from "react-icons/ri";
 import { Typography } from "../ui/Typography";
+import { authAPI } from "../api";
 
 export const Header = () => {
+  const logout = () => {
+    console.log(authAPI.logout());
+  };
   return (
     <HeaderWrapper>
       <Flex
@@ -20,8 +24,12 @@ export const Header = () => {
 
         <Flex sx={{ margin: "auto 1rem", gap: "1rem" }}>
           <Typography>UserName</Typography>
-          <Button semantic sx={{ display: "flex", alignItems: "center" }}>
-            <FiLogOut /> <Typography>Logout</Typography>
+          <Button
+            onClick={logout}
+            semantic
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <RiLogoutBoxRFill /> <Typography>Logout</Typography>
           </Button>
         </Flex>
       </Flex>
