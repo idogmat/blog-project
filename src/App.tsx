@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     // console.log(accessToken);
     // document.cookie = `refreshToken=${accessToken}`;
-    // accessToken && authAPI.refreshToken(accessToken);
+    // accessToken && authAPI.refreshToken(accessToken)s;
     // accessToken && authAPI.refreshToken(accessToken);
     isLogged && navigate("/" + RoutesEnum.BLOGS);
     !isLogged && navigate("/" + RoutesEnum.LOGIN);

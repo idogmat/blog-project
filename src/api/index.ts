@@ -1,5 +1,5 @@
-import axios from "axios";
 import { IBlog } from "../store/slicers/blogsSlice";
+import axios from "axios";
 interface ILogin {
   loginOrEmail: string;
   password: string;
@@ -13,7 +13,30 @@ export const AdminInstance = axios.create({
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_BACK_URL,
   withCredentials: true,
+  headers: {
+    Authorization: "Basic YWRtaW46cXdlcnR5",
+  },
 });
+// const supportToken = (): any => {
+//   let token: { current: string } = {
+//     current: "",
+//   };
+//   function setToken(newToken: string) {
+//     newToken && (token.current = newToken);
+//     localStorage.setItem("token", newToken);
+//   }
+//   return [token, setToken];
+// };
+// export function dontBelieveBackend(): any {
+//   const [token, setToken] = supportToken();
+//   const instance = axios.create({
+//     baseURL: process.env.REACT_APP_BACK_URL,
+//     headers: {
+//       Authorization: `Bearer ${token.current}`,
+//     },
+//   });
+//   return { instance, setToken };
+// }
 export const authAPI = {
   authMe: (accessToken: string) => {
     return axios.get(process.env.REACT_APP_BACK_URL + "auth/me", {

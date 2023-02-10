@@ -6,7 +6,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Typography } from "../../ui/Typography";
 import { IBlog } from "../../store/slicers/blogsSlice";
 
-export const LayoutCurrenBlog: FC<any> = (props) => {
+export const LayoutCurrenBlog = () => {
   const { backToState } = useLocation().state;
 
   useEffect(() => {}, []);
