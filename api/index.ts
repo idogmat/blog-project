@@ -4,51 +4,47 @@ interface ILogin {
   loginOrEmail: string;
   password: string;
 }
+
 export const AdminInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACK_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     Authorization: "Basic YWRtaW46cXdlcnR5",
   },
 });
 export const instance = axios.create({
-  baseURL: process.env.REACT_APP_BACK_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
-  headers: {
-    Authorization: "Basic YWRtaW46cXdlcnR5",
-  },
 });
-// const supportToken = (): any => {
-//   let token: { current: string } = {
-//     current: "",
-//   };
-//   function setToken(newToken: string) {
-//     newToken && (token.current = newToken);
-//     localStorage.setItem("token", newToken);
-//   }
-//   return [token, setToken];
-// };
-// export function dontBelieveBackend(): any {
-//   const [token, setToken] = supportToken();
-//   const instance = axios.create({
-//     baseURL: process.env.REACT_APP_BACK_URL,
-//     headers: {
-//       Authorization: `Bearer ${token.current}`,
-//     },
-//   });
-//   return { instance, setToken };
-// }
+const supportToken = (): any => {
+  let token: { current: string } = {
+    current: "",
+  };
+  function setToken(newToken: string) {
+    newToken && (token.current = newToken);
+    localStorage.setItem("token", newToken);
+  }
+  return [token, setToken];
+};
+export function dontBelieveBackend(): any {
+  const [token, setToken] = supportToken();
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_URL,
+    headers: {
+      Authorization: `Bearer ${token.current}`,
+    },
+  });
+  return { instance, setToken };
+}
 export const authAPI = {
   authMe: (accessToken: string) => {
-    return axios.get(process.env.REACT_APP_BACK_URL + "auth/me", {
+    return axios.get(import.meta.env.VITE_BASE_URL + "auth/me", {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
     });
   },
-  refreshToken: (accessToken: string) => {
-    return axios.post(process.env.REACT_APP_BACK_URL + "auth/refresh-token", {
-      accessToken,
-    });
+  refreshToken: () => {
+    return axios.post(import.meta.env.VITE_BASE_URL + "auth/refresh-token");
   },
   register: () => {
     return instance.post("auth/registration", {});

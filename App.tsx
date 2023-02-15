@@ -16,11 +16,14 @@ function App() {
   useEffect(() => {
     // console.log(accessToken);
     // document.cookie = `refreshToken=${accessToken}`;
-    // accessToken && authAPI.refreshToken(accessToken)s;
+    setTimeout(() => {
+      console.log(authAPI.refreshToken());
+    }, 1000);
+
     // accessToken && authAPI.refreshToken(accessToken);
     isLogged && navigate("/" + RoutesEnum.BLOGS);
     !isLogged && navigate("/" + RoutesEnum.LOGIN);
-  }, [accessToken, isLogged]);
+  }, [isLogged]);
 
   return (
     <PageWrapper>
