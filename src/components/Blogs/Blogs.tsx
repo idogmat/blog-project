@@ -50,7 +50,7 @@ export const Blogs = () => {
     searchNameTerm: search,
   });
   const checkSize =
-    page + 1 === pageSize ? totalCount - items.length : pageSize;
+    page + 1 === pageSize ? totalCount - Object.keys(items).length : pageSize;
   useEffect(() => {
     dispatch(setBlogs(pageAndSize));
   }, [pageAndSize]);
@@ -109,8 +109,8 @@ export const Blogs = () => {
             )}
           </Flex>
           <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
-            {items.map((b) => {
-              return <BlogsElement key={b.id} {...b} />;
+            {Object.keys(items).map((k) => {
+              return <BlogsElement key={items[k].id} {...items[k]} />;
             })}
           </Flex>
           <Button

@@ -2,13 +2,22 @@ import React, { FC, useEffect } from "react";
 import { Flex } from "../../ui/Flex";
 import { GoBack } from "../../common/components/GoBack";
 import { Image } from "../../ui/Image";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { Typography } from "../../ui/Typography";
 import { IBlog } from "../../store/slicers/blogsSlice";
+import { useAllSelector, useAppDispatch } from "../../utils/hooks";
+import { setPostsForBlog } from "../../store/thunks/blogsThunks";
+import { blogsStateSelector, postsOnBlogStateSelector } from "../../store/selectors";
 
 export const LayoutCurrenBlog = () => {
   const { backToState } = useLocation().state;
-
+  const posts =  useAllSelector(postsOnBlogStateSelector);
+  const {id} = useParams()
+  const dispatch = useAppDispatch();
+  useEffect(()=>{
+    console.log(id);
+    id && dispatch(setPostsForBlog({id,pageNumber:1,pageSize:10,sortDirection:'asc'}))
+  },[id])
   useEffect(() => {}, []);
   return (
     <Flex fDirection={"column"}>
@@ -45,6 +54,7 @@ export const LayoutCurrenBlog = () => {
           </Typography>
         </Flex>
       </Flex>
+      {JSON.stringify(posts)}
     </Flex>
   );
 };

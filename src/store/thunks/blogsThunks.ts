@@ -32,6 +32,28 @@ export const setBlogs = createAppAsyncThunk(
     });
   }
 );
+export const setPostsForBlog = createAppAsyncThunk(
+  "blogs/setPostsForBlog",
+  async (
+    params: {
+      id:string,
+      pageNumber: number;
+      pageSize: number;
+      sortDirection: string;
+    },
+    thunkAPI
+  ) => {
+    return errorHandlingThunk(thunkAPI, async () => {
+        const { data } = await blogsAPI.getPostsForBlog(params.id,{
+          ...params,
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+        });
+      console.log(data);
+        thunkAPI.dispatch(blogsAC.setPostsForBlog({id:params.id, data:data.items })) ;
+    });
+  }
+);
 export const loadNewBlogs = createAppAsyncThunk(
   "blogs/loadNewBlogs",
   async (

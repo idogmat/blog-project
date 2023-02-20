@@ -78,6 +78,9 @@ export const blogsAPI = {
   addBlog: (fields: IBlogAPI) => {
     return AdminInstance.post("/blogs", fields);
   },
+  getPostsForBlog:(id:string,params: Partial<ISetRequest>)=>{
+    return instance.get(`/blogs/${id}/posts`,{params})
+}
 };
 export const postsAPI = {
   getPosts: (params: Partial<ISetRequest>) => {

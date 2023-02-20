@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Flex } from "../../ui/Flex";
 import { Image } from "../../ui/Image";
 import { IBlog } from "../../store/slicers/blogsSlice";
@@ -7,16 +7,19 @@ import { BiDotsVertical } from "react-icons/bi";
 import { Button } from "../../ui/Button";
 import { Dropdown } from "../../ui/Dropdown";
 import { useComponentVisible } from "../../utils/hooks/useComponentVisible";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import { setItemToLC } from "../../utils/localStorage";
+import { setPostsForBlog } from "../../store/thunks/blogsThunks";
+import { useAppDispatch } from "../../utils/hooks";
 
 export const BlogsElement: FC<IBlog> = ({
-  name,
-  description,
-  websiteUrl,
-  createdAt,
-  id,
-}) => {
+                                          name,
+                                          description,
+                                          websiteUrl,
+                                          createdAt,
+                                          id,
+                                          posts
+                                        }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   // const savePackData = () => {
@@ -26,6 +29,7 @@ export const BlogsElement: FC<IBlog> = ({
   //     createdAt,
   //     id,});
   // };
+  // debugger
   const backToState = { name, description, websiteUrl, createdAt, id };
   return (
     <Flex fDirection={"row"} justify={"space-between"}>
@@ -59,6 +63,7 @@ export const BlogsElement: FC<IBlog> = ({
           <Typography>Delete</Typography>
         </Dropdown>
       </Button>
+
     </Flex>
   );
 };
