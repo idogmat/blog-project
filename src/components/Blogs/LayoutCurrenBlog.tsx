@@ -1,13 +1,12 @@
-import React, { FC, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Flex } from "../../ui/Flex";
 import { GoBack } from "../../common/components/GoBack";
 import { Image } from "../../ui/Image";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Typography } from "../../ui/Typography";
-import { IBlog } from "../../store/slicers/blogsSlice";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
 import { setPostsForBlog } from "../../store/thunks/blogsThunks";
-import { blogsStateSelector, postsOnBlogStateSelector } from "../../store/selectors";
+import { postsOnBlogStateSelector } from "../../store/selectors";
 
 export const LayoutCurrenBlog = () => {
   const { backToState } = useLocation().state;
@@ -15,7 +14,6 @@ export const LayoutCurrenBlog = () => {
   const {id} = useParams()
   const dispatch = useAppDispatch();
   useEffect(()=>{
-    console.log(id);
     id && dispatch(setPostsForBlog({id,pageNumber:1,pageSize:10,sortDirection:'asc'}))
   },[id])
   useEffect(() => {}, []);
@@ -53,8 +51,11 @@ export const LayoutCurrenBlog = () => {
             {backToState.description}
           </Typography>
         </Flex>
+        <Flex>
+          {JSON.stringify(posts)}
+        </Flex>
       </Flex>
-      {JSON.stringify(posts)}
+
     </Flex>
   );
 };

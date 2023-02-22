@@ -1,10 +1,14 @@
 import { FC } from "react";
 import { Blogs } from "../../components/Blogs/Blogs";
-import { Login } from "../../components/Login";
+import { Login } from "../../components/Login/Login";
 import { Posts } from "../../components/Posts/Posts";
 import { LayoutCurrenPost } from "../../components/Posts/LayoutCurrenPost";
 import { LayoutCurrenBlog } from "../../components/Blogs/LayoutCurrenBlog";
 import { NotFound } from "../components/NotFound";
+import { Registration } from "../../components/Registration/Registration";
+import { ConfirmEmail } from "../../components/ConfirmEmail/ConfirmEmail";
+import { ForgotPassword } from "../../components/ForgotPassword/ForgotPassword";
+import { RecoveryForm } from "../../components/ForgotPassword/RecoveryForm";
 
 export interface IRoute {
   path: string;
@@ -15,6 +19,8 @@ export interface IRoute {
 export enum RoutesEnum {
   LOGIN = "login",
   REGISTER = "/register",
+  FORGOT_PASSWORD = "/recovery",
+  CONFIRM_EMAIL = "/confirmEmail/:id",
   BLOGS = "blogs",
   BLOG = "blogs/:id",
   POSTS = "posts",
@@ -26,6 +32,24 @@ export const RoutePaths: IRoute[] = [
   {
     path: RoutesEnum.LOGIN,
     component: Login,
+    isLayout: false,
+    isLogged: false,
+  },
+  {
+    path: RoutesEnum.REGISTER,
+    component: Registration,
+    isLayout: false,
+    isLogged: false,
+  },
+  {
+    path: RoutesEnum.CONFIRM_EMAIL,
+    component: ConfirmEmail,
+    isLayout: false,
+    isLogged: false,
+  },
+  {
+    path: RoutesEnum.FORGOT_PASSWORD,
+    component: RecoveryForm,
     isLayout: false,
     isLogged: false,
   },

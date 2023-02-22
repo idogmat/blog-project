@@ -1,5 +1,6 @@
 import { IBlog } from "../store/slicers/blogsSlice";
 import axios from "axios";
+import { IRegisterFields } from "../store/thunks/authThunk";
 interface ILogin {
   loginOrEmail: string;
   password: string;
@@ -44,10 +45,19 @@ export const authAPI = {
     });
   },
   refreshToken: () => {
-    return axios.post(import.meta.env.VITE_BASE_URL + "auth/refresh-token");
+    return instance.post("auth/refresh-token", {});
   },
-  register: () => {
-    return instance.post("auth/registration", {});
+  register: (fields: IRegisterFields) => {
+    return instance.post("auth/registration", {
+      ...fields,
+      customDomain: "http://localhost:3000/#/confirmEmail",
+    });
+  },
+  recovery: (email: string) => {
+    return instance.post("auth/password-recovery", {
+      email,
+      customDomain: "http://localhost:3000/#/confirmEmail",
+    });
   },
 
   login: (fields: ILogin) => {
@@ -78,9 +88,9 @@ export const blogsAPI = {
   addBlog: (fields: IBlogAPI) => {
     return AdminInstance.post("/blogs", fields);
   },
-  getPostsForBlog:(id:string,params: Partial<ISetRequest>)=>{
-    return instance.get(`/blogs/${id}/posts`,{params})
-}
+  getPostsForBlog: (id: string, params: Partial<ISetRequest>) => {
+    return instance.get(`/blogs/${id}/posts`, { params });
+  },
 };
 export const postsAPI = {
   getPosts: (params: Partial<ISetRequest>) => {

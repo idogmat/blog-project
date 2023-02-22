@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { isLoggedLinks, RoutePaths, RoutesEnum } from "../common/routes";
 import React from "react";
 
-export const AppRouter = () => {
+export const Router = () => {
   return (
     <Routes>
       {RoutePaths.map((route) => (

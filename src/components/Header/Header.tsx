@@ -1,10 +1,10 @@
 import React from "react";
-import { HeaderWrapper } from "../ui/HeaderWrapper";
-import { Flex } from "../ui/Flex";
-import { Button } from "../ui/Button";
+import { HeaderWrapper } from "../../ui/HeaderWrapper";
+import { Flex } from "../../ui/Flex";
+import { Button } from "../../ui/Button";
 import { RiLogoutBoxRFill } from "react-icons/ri";
-import { Typography } from "../ui/Typography";
-import { authAPI } from "../api";
+import { Typography } from "../../ui/Typography";
+import { authAPI } from "../../api";
 
 export const Header = () => {
   const logout = () => {

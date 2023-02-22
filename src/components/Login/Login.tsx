@@ -4,21 +4,21 @@ import {
   LoginForm,
   LoginOffer,
   LoginWrapper,
-} from "../ui/LoginForm";
-import { useAllSelector, useAppDispatch } from "../utils/hooks";
-import { appStateSelector, authStateSelector } from "../store/selectors";
+} from "../../ui/LoginForm";
+import { useAllSelector, useAppDispatch } from "../../utils/hooks";
+import { appStateSelector, authStateSelector } from "../../store/selectors";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
-import { login } from "../store/thunks/authThunk";
+import { login } from "../../store/thunks/authThunk";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Paper } from "../ui/Paper";
-import { Typography } from "../ui/Typography";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
-import loginImg from "../assets/svg/login.svg";
-import { RoutePaths, RoutesEnum } from "../common/routes";
-import { withAuthentication } from "../common/routes/hoc";
+import { Paper } from "../../ui/Paper";
+import { Typography } from "../../ui/Typography";
+import { Button } from "../../ui/Button";
+import { Input } from "../../ui/Input";
+import loginImg from "../../assets/svg/login.svg";
+import { RoutePaths, RoutesEnum } from "../../common/routes";
+import { withAuthentication } from "../../common/routes/hoc";
 
 export const basicSchema = yup.object().shape({
   password: yup.string().min(5, "Password is too short").required("Required"),
@@ -108,6 +108,7 @@ export const Login = () => {
                   }
                 ></Input>
                 <Typography
+                  underline
                   sx={{ fontSize: "16px", color: "#F8346B", textAlign: "end" }}
                 >
                   <Link to={"/recovery"}>Forgot Password?</Link>
@@ -124,14 +125,17 @@ export const Login = () => {
                   <Typography variant={"sub-title-md"} as={"span"}>
                     Haven't account?
                   </Typography>
-                  <Typography sx={{ fontSize: "16px", color: "#F8346B" }}>
+                  <Typography
+                    underline
+                    sx={{ fontSize: "16px", color: "#F8346B" }}
+                  >
                     <Link to={"/register"}>Sign up</Link>
                   </Typography>
                 </LoginOffer>
               </LoginForm>
             </Paper>
           </LoginContent>
-          <img src={loginImg} alt="" />
+          <img src={loginImg} alt="login" />
         </LoginWrapper>
       )}
     </>

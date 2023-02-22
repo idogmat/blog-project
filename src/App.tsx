@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.scss";
-import { AppRouter } from "./components/AppRouter";
-import { Header } from "./components/Header";
+import { Router } from "./components/Router";
+import { Header } from "./components/Header/Header";
 import { MainWrapper, PageWrapper } from "./ui/MainWrapper";
 import { NavMenu } from "./components/NavMenu/NavMenu";
 import { useAllSelector } from "./utils/hooks";
@@ -16,11 +16,11 @@ function App() {
   useEffect(() => {
     // console.log(accessToken);
     // document.cookie = `refreshToken=${accessToken}`;
-    // setTimeout(() => {
+    // setInterval(() => {
     //   console.log(authAPI.refreshToken());
-    // }, 1000);
+    // }, 6000);
 
-    // accessToken && authAPI.refreshToken(accessToken);
+    accessToken && authAPI.refreshToken();
     isLogged && navigate("/" + RoutesEnum.BLOGS);
     !isLogged && navigate("/" + RoutesEnum.LOGIN);
   }, [isLogged]);
@@ -30,7 +30,7 @@ function App() {
       <Header />
       <MainWrapper>
         <NavMenu />
-        <AppRouter />
+        <Router />
       </MainWrapper>
     </PageWrapper>
   );

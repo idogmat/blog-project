@@ -1,10 +1,16 @@
 import { createAppAsyncThunk } from "../type";
 import { authAPI } from "../../api";
 import { AppAC } from "../slicers/appSlice";
+import { errorHandlingThunk } from "../../utils/errorHandling";
 export interface IUserFields {
   loginOrEmail: string;
   password: string;
   rememberMe?: boolean;
+}
+export interface IRegisterFields {
+  login: string;
+  email: string;
+  password: string;
 }
 export const authMe = createAppAsyncThunk(
   "auth/authMe",
@@ -27,15 +33,17 @@ export const login = createAppAsyncThunk(
     });
   }
 );
-export const errorHandlingThunk = async (thunkAPI: any, logic: Function) => {
-  thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
-  try {
-    return await logic();
-  } catch (e: any) {
-    const error = e.response ? e.response.data.error : e.message;
-    thunkAPI.dispatch(AppAC.setError({ error }));
-    return thunkAPI.rejectWithValue(error);
-  } finally {
-    thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: false }));
+export const register = createAppAsyncThunk(
+  "auth/register",
+  async (fields: IRegisterFields, thunkAPI) => {
+    return errorHandlingThunk(thunkAPI, async () => {
+      const { data } = await authAPI.register(fields);
+      const { error, accessToken } = data;
+      thunkAPI.dispatch(
+        AppAC.setSuccessMessage({ message: "You have successfully authorized" })
+      );
+      thunkAPI.dispatch(authMe({ accessToken }));
+      return { accessToken };
+    });
   }
-};
+);
