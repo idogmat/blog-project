@@ -16,16 +16,15 @@ import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
 
 import * as yup from "yup";
-import { VerificationLinkSent } from "./VerificationLinkSent";
+import { VerificationLinkExpired } from "./VerificationLinkExpired";
 import { ForgotPassword } from "./ForgotPassword";
+import { CreateNewPassword } from "./CreateNewPassword";
 
 export const RecoveryForm = () => {
-  const dispatch = useAppDispatch();
   // Local State
   const [sent, setSent] = useState(false);
-  const { isLogged } = useAllSelector(authStateSelector);
   // Formik
   const navigate = useNavigate();
 
-  return sent ? <VerificationLinkSent /> : <ForgotPassword setSent={setSent} />;
+  return sent ? <div>message sent</div> : <ForgotPassword setSent={setSent} />;
 };

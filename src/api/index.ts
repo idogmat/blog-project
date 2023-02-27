@@ -34,15 +34,18 @@ export function dontBelieveBackend(): any {
       Authorization: `Bearer ${token.current}`,
     },
   });
-  return { instance, setToken };
+  return { instance, setToken, token };
 }
 export const authAPI = {
   authMe: (accessToken: string) => {
-    return axios.get(import.meta.env.VITE_BASE_URL + "auth/me", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return dontBelieveBackend().instance.get(
+      import.meta.env.VITE_BASE_URL + "auth/me",
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   refreshToken: () => {
     return instance.post("auth/refresh-token", {});
@@ -50,14 +53,20 @@ export const authAPI = {
   register: (fields: IRegisterFields) => {
     return instance.post("auth/registration", {
       ...fields,
-      customDomain: "http://localhost:3000/#/confirmEmail",
+      customDomain: import.meta.env.VITE_CONFIRM_EMAIL,
     });
+  },
+  registerConfirm: (code: string) => {
+    return instance.post("auth/registration-confirmation", { code });
   },
   recovery: (email: string) => {
     return instance.post("auth/password-recovery", {
       email,
-      customDomain: "http://localhost:3000/#/confirmEmail",
+      customDomain: import.meta.env.VITE_RECOVERY_PWD,
     });
+  },
+  setNewPassword: (fields: { newPassword: string; recoveryCode: string }) => {
+    return instance.post("auth/new-password", fields);
   },
 
   login: (fields: ILogin) => {

@@ -73,23 +73,19 @@ export const Registration = () => {
               <LoginForm onSubmit={loginForm.handleSubmit}>
                 <Input
                   type={"text"}
-                  error={loginHasError("loginOrEmail")}
+                  error={loginHasError("login")}
                   label={
-                    loginHasError("loginOrEmail")
-                      ? loginForm.errors.login
-                      : "Username"
+                    loginHasError("login") ? loginForm.errors.login : "Username"
                   }
-                  {...loginForm.getFieldProps("loginOrEmail")}
+                  {...loginForm.getFieldProps("login")}
                 ></Input>
                 <Input
                   type={"text"}
-                  error={loginHasError("loginOrEmail")}
+                  error={loginHasError("email")}
                   label={
-                    loginHasError("loginOrEmail")
-                      ? loginForm.errors.email
-                      : "Email"
+                    loginHasError("email") ? loginForm.errors.email : "Email"
                   }
-                  {...loginForm.getFieldProps("loginOrEmail")}
+                  {...loginForm.getFieldProps("email")}
                 ></Input>
                 <Input
                   type={showPassword ? "text" : "password"}

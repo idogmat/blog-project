@@ -1,11 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { authMe, login } from "../thunks/authThunk";
+import { IBlog } from "./blogsSlice";
+import { recoveryThunk } from "../../components/ForgotPassword/thanks/recoveryThunk";
 
 export interface IAuthState {
   isAuth: boolean;
   isAdmin: boolean;
   accessToken: string | null;
   isLogged: boolean;
+  recoveryEmail: string;
   user: {
     login: string;
     email: string;
@@ -18,12 +21,17 @@ const initialState: IAuthState = {
   accessToken: null,
   isAdmin: true,
   isLogged: false,
+  recoveryEmail: "",
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    // setRecoveryEmail: (state, action) => {
+    //   state.recoveryEmail = action.payload.email;
+    // },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
@@ -33,6 +41,9 @@ const authSlice = createSlice({
       .addCase(authMe.fulfilled, (state, action) => {
         state.isAuth = true;
         state.user = action.payload;
+      })
+      .addCase(recoveryThunk.fulfilled, (state, action) => {
+        state.recoveryEmail = action.meta.arg;
       });
     //     .addCase(authMeTC.fulfilled, (state, action) => {
     //         state.isAuth = true;

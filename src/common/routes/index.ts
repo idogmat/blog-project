@@ -9,6 +9,8 @@ import { Registration } from "../../components/Registration/Registration";
 import { ConfirmEmail } from "../../components/ConfirmEmail/ConfirmEmail";
 import { ForgotPassword } from "../../components/ForgotPassword/ForgotPassword";
 import { RecoveryForm } from "../../components/ForgotPassword/RecoveryForm";
+import { CreateNewPassword } from "../../components/ForgotPassword/CreateNewPassword";
+import { SetNewPassword } from "../../components/ForgotPassword/SetNewPassword";
 
 export interface IRoute {
   path: string;
@@ -20,7 +22,8 @@ export enum RoutesEnum {
   LOGIN = "login",
   REGISTER = "/register",
   FORGOT_PASSWORD = "/recovery",
-  CONFIRM_EMAIL = "/confirmEmail/:id",
+  NEW_PASSWORD = "/recovery/*",
+  CONFIRM_EMAIL = "/confirmEmail/*",
   BLOGS = "blogs",
   BLOG = "blogs/:id",
   POSTS = "posts",
@@ -50,6 +53,12 @@ export const RoutePaths: IRoute[] = [
   {
     path: RoutesEnum.FORGOT_PASSWORD,
     component: RecoveryForm,
+    isLayout: false,
+    isLogged: false,
+  },
+  {
+    path: RoutesEnum.NEW_PASSWORD,
+    component: SetNewPassword,
     isLayout: false,
     isLogged: false,
   },

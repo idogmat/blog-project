@@ -18,38 +18,96 @@ import { Button } from "../../ui/Button";
 import * as yup from "yup";
 import verificationEmail from "../../assets/svg/verification.svg";
 import { Flex } from "../../ui/Flex";
+import { recoveryThunk } from "./thanks/recoveryThunk";
+import { setNewPassword } from "./thanks/setNewPasswordThunk";
 
-export const CreateNewPassword = () => {
+const basicSchema = yup.object().shape({
+  password: yup.string().required().min(6),
+  passwordConfirm: yup
+    .string()
+    .required()
+    .min(6)
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
+});
+
+export function hasError(form: FormikProps<any>, prop: string): boolean {
+  return !!form.errors[prop] && !!form.touched[prop];
+}
+interface ICreate {
+  setCode: (b: boolean) => void;
+  code: string | undefined;
+}
+export const CreateNewPassword: React.FC<ICreate> = ({ code, setCode }) => {
+  const dispatch = useAppDispatch();
+
+  const loginForm = useFormik({
+    initialValues: {
+      password: "",
+      passwordConfirm: "",
+    },
+    validationSchema: basicSchema,
+    onSubmit: (values: { password: string }) => {
+      code &&
+        dispatch(
+          setNewPassword({ newPassword: values.password, recoveryCode: code })
+        );
+    },
+  });
+
+  // Utils
+  const emailHasError = hasError.bind(null, loginForm);
+
   return (
-    <LoginWrapper
-      sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
-    >
-      <LoginContent sx={{ paddingBottom: "1rem" }}>
-        <Flex fDirection={"column"} sx={{ gap: "2rem" }}>
+    <LoginWrapper sx={{ margin: "auto" }}>
+      <LoginContent>
+        <Paper sx={{ padding: "35px" }}>
           <Typography
             variant={"title"}
             sx={{ textAlign: "center", marginBottom: "0.6rem" }}
           >
-            Email verification link expired
+            Create New Password
           </Typography>
-          <Typography
-            align={"center"}
-            sx={{
-              fontSize: "14px",
-              color: "#797476",
-
-              maxWidth: "300px",
-            }}
-          >
-            The link has been sent by email. If you don’t receive an email, send
-            link again
-          </Typography>
-          <Button bColor={"#fff"} sx={{ display: "flex", margin: "auto" }}>
-            Resend verification link
-          </Button>
-        </Flex>
+          <LoginForm onSubmit={loginForm.handleSubmit}>
+            <Input
+              type={"text"}
+              error={emailHasError("password")}
+              label={
+                emailHasError("password")
+                  ? loginForm.errors.password
+                  : "New password"
+              }
+              {...loginForm.getFieldProps("password")}
+            ></Input>
+            <Input
+              type={"text"}
+              error={emailHasError("passwordConfirm")}
+              label={
+                emailHasError("passwordConfirm")
+                  ? loginForm.errors.passwordConfirm
+                  : "Password confirmation"
+              }
+              {...loginForm.getFieldProps("passwordConfirm")}
+            ></Input>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                color: "#797476",
+                textAlign: "end",
+                maxWidth: "300px",
+              }}
+            >
+              Your password must be between 6 and 20 characters
+            </Typography>
+            <Button
+              type={"submit"}
+              bColor={"#fff"}
+              disabled={emailHasError("email")}
+            >
+              Create new password
+            </Button>
+          </LoginForm>
+        </Paper>
       </LoginContent>
-      <img src={verificationEmail} alt="verificationEmail" />
     </LoginWrapper>
   );
 };

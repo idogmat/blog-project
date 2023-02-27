@@ -19,7 +19,7 @@ import * as yup from "yup";
 import verificationEmail from "../../assets/svg/verification.svg";
 import { Flex } from "../../ui/Flex";
 
-export const VerificationLinkSent = () => {
+export const VerificationLinkExpired = () => {
   return (
     <LoginWrapper
       sx={{ margin: "auto", display: "flex", flexDirection: "column" }}

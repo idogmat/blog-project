@@ -18,7 +18,6 @@ import { Button } from "../../ui/Button";
 import * as yup from "yup";
 import { recoveryThunk } from "./thanks/recoveryThunk";
 
-interface IRecovery {}
 export const basicSchema = yup.object().shape({
   email: yup.string().email().required("Email must be a valid"),
 });
