@@ -1,9 +1,9 @@
-import { createAppAsyncThunk } from "../type";
-import { blogsAPI, IBlogAPI } from "../../api";
-import { errorHandlingThunk } from "../../utils/errorHandling";
-import { blogsAC } from "../slicers/blogsSlice";
-import { useAllSelector } from "../../utils/hooks";
-import { blogsStateSelector } from "../selectors";
+import { createAppAsyncThunk } from "../../../store/type";
+import { blogsAPI, IBlogAPI } from "../../../api";
+import { errorHandlingThunk } from "../../../utils/errorHandling";
+import { blogsAC } from "../slice/blogsSlice";
+import { useAllSelector } from "../../../utils/hooks";
+import { blogsStateSelector } from "../../../store/selectors";
 
 export const setBlogs = createAppAsyncThunk(
   "blogs/setBlogs",
@@ -24,6 +24,7 @@ export const setBlogs = createAppAsyncThunk(
           pageSize: params.pageSize,
           sortBy: "createdAt",
         });
+
         return { data };
       } else {
         const { data } = await blogsAPI.getBlogs(params);
@@ -36,7 +37,7 @@ export const setPostsForBlog = createAppAsyncThunk(
   "blogs/setPostsForBlog",
   async (
     params: {
-      id:string,
+      id: string;
       pageNumber: number;
       pageSize: number;
       sortDirection: string;
@@ -44,13 +45,15 @@ export const setPostsForBlog = createAppAsyncThunk(
     thunkAPI
   ) => {
     return errorHandlingThunk(thunkAPI, async () => {
-        const { data } = await blogsAPI.getPostsForBlog(params.id,{
-          ...params,
-          pageNumber: params.pageNumber,
-          pageSize: params.pageSize,
-        });
+      const { data } = await blogsAPI.getPostsForBlog(params.id, {
+        ...params,
+        pageNumber: params.pageNumber,
+        pageSize: params.pageSize,
+      });
       console.log(data);
-        thunkAPI.dispatch(blogsAC.setPostsForBlog({id:params.id, data:data.items })) ;
+      thunkAPI.dispatch(
+        blogsAC.setPostsForBlog({ id: params.id, data: data.items })
+      );
     });
   }
 );
@@ -70,7 +73,6 @@ export const loadNewBlogs = createAppAsyncThunk(
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
       });
-
       thunkAPI.dispatch(blogsAC.setPageBlogs({ page: params.pageNumber }));
       return { data };
     });

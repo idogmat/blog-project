@@ -1,51 +1,16 @@
-import { IBlog } from "../store/slicers/blogsSlice";
+import { IBlog } from "../features/Blogs/slice/blogsSlice";
 import axios from "axios";
 import { IRegisterFields } from "../store/thunks/authThunk";
-interface ILogin {
-  loginOrEmail: string;
-  password: string;
-}
+import { AdminInstance, API_URL, instance } from "./instance";
+import { ILogin } from "./typse";
 
-export const AdminInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  headers: {
-    Authorization: "Basic YWRtaW46cXdlcnR5",
-  },
-});
-export const instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  withCredentials: true,
-});
-const supportToken = (): any => {
-  let token: { current: string } = {
-    current: "",
-  };
-  function setToken(newToken: string) {
-    newToken && (token.current = newToken);
-    localStorage.setItem("token", newToken);
-  }
-  return [token, setToken];
-};
-export function dontBelieveBackend(): any {
-  const [token, setToken] = supportToken();
-  const instance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
-    headers: {
-      Authorization: `Bearer ${token.current}`,
-    },
-  });
-  return { instance, setToken, token };
-}
 export const authAPI = {
   authMe: (accessToken: string) => {
-    return dontBelieveBackend().instance.get(
-      import.meta.env.VITE_BASE_URL + "auth/me",
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+    return instance.get("auth/me", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
   },
   refreshToken: () => {
     return instance.post("auth/refresh-token", {});

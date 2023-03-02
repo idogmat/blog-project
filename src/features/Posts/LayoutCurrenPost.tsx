@@ -2,9 +2,8 @@ import React, { FC, useEffect } from "react";
 import { Flex } from "../../ui/Flex";
 import { GoBack } from "../../common/components/GoBack";
 import { Image } from "../../ui/Image";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Typography } from "../../ui/Typography";
-import { IBlog } from "../../store/slicers/blogsSlice";
 
 export const LayoutCurrenPost: FC<any> = (props) => {
   const { backToState } = useLocation().state;

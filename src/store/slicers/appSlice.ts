@@ -34,7 +34,7 @@ const appSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(initializeApp.fulfilled, (state) => {
-      state.isInitialized = true;
+      return { ...state, isInitialized: true };
     });
   },
 });

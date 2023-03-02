@@ -1,6 +1,6 @@
-import { createAppAsyncThunk } from "../type";
-import { blogsAPI, IBlogAPI, postsAPI } from "../../api";
-import { errorHandlingThunk } from "../../utils/errorHandling";
+import { createAppAsyncThunk } from "../../../store/type";
+import { blogsAPI, IBlogAPI, postsAPI } from "../../../api";
+import { errorHandlingThunk } from "../../../utils/errorHandling";
 
 export const setPosts = createAppAsyncThunk(
   "blogs/setPosts",

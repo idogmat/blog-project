@@ -5,8 +5,10 @@ import { Button } from "../../ui/Button";
 import { RiLogoutBoxRFill } from "react-icons/ri";
 import { Typography } from "../../ui/Typography";
 import { authAPI } from "../../api";
+import { useAllSelector } from "../../utils/hooks";
 
 export const Header = () => {
+  const user = useAllSelector((state) => state.auth.user);
   const logout = () => {
     console.log(authAPI.logout());
   };
@@ -23,7 +25,7 @@ export const Header = () => {
         </Flex>
 
         <Flex sx={{ margin: "auto 1rem", gap: "1rem" }}>
-          <Typography>UserName</Typography>
+          <Typography>{!!user ? user.email : "UserName"}</Typography>
           <Button
             onClick={logout}
             semantic

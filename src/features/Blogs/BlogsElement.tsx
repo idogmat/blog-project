@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { Flex } from "../../ui/Flex";
 import { Image } from "../../ui/Image";
-import { IBlog } from "../../store/slicers/blogsSlice";
+import { IBlog } from "./slice/blogsSlice";
 import { Typography } from "../../ui/Typography";
 import { BiDotsVertical } from "react-icons/bi";
 import { Button } from "../../ui/Button";
@@ -9,17 +9,17 @@ import { Dropdown } from "../../ui/Dropdown";
 import { useComponentVisible } from "../../utils/hooks/useComponentVisible";
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import { setItemToLC } from "../../utils/localStorage";
-import { setPostsForBlog } from "../../store/thunks/blogsThunks";
+import { setPostsForBlog } from "./thunks/blogsThunks";
 import { useAppDispatch } from "../../utils/hooks";
 
 export const BlogsElement: FC<IBlog> = ({
-                                          name,
-                                          description,
-                                          websiteUrl,
-                                          createdAt,
-                                          id,
-                                          posts
-                                        }) => {
+  name,
+  description,
+  websiteUrl,
+  createdAt,
+  id,
+  posts,
+}) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   // const savePackData = () => {
@@ -63,7 +63,6 @@ export const BlogsElement: FC<IBlog> = ({
           <Typography>Delete</Typography>
         </Dropdown>
       </Button>
-
     </Flex>
   );
 };

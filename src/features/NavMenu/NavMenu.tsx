@@ -6,10 +6,10 @@ import { useAllSelector } from "../../utils/hooks";
 import { authStateSelector } from "../../store/selectors";
 
 export const NavMenu = () => {
-  const { isLogged } = useAllSelector(authStateSelector);
+  const { isAuth } = useAllSelector(authStateSelector);
   return (
     <>
-      {isLogged && (
+      {isAuth && (
         <Navigate>
           {filterLinks.map((page) => {
             return <MenuLink key={page.path} page={page} />;

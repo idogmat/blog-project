@@ -6,7 +6,7 @@ import {
   LoginWrapper,
 } from "../../ui/LoginForm";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { appStateSelector, authStateSelector } from "../../store/selectors";
+import { authStateSelector } from "../../store/selectors";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
@@ -17,8 +17,8 @@ import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { Input } from "../../ui/Input";
 import loginImg from "../../assets/svg/login.svg";
-import { RoutePaths, RoutesEnum } from "../../common/routes";
-import { withAuthentication } from "../../common/routes/hoc";
+import { RoutesEnum } from "../../common/routes";
+import { IFields } from "./types";
 
 export const basicSchema = yup.object().shape({
   password: yup.string().min(5, "Password is too short").required("Required"),
@@ -26,16 +26,12 @@ export const basicSchema = yup.object().shape({
 export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
-interface IFields {
-  loginOrEmail: string;
-  password: string;
-}
 
 export const Login = () => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
   // Local State
-  const { isLogged } = useAllSelector(authStateSelector);
+  const { isAuth } = useAllSelector(authStateSelector);
   const [showPassword, setShowPassword] = useState(false);
   const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
@@ -59,7 +55,7 @@ export const Login = () => {
 
   return (
     <>
-      {isLogged ? (
+      {isAuth ? (
         <Navigate to={"/" + RoutesEnum.BLOGS} />
       ) : (
         <LoginWrapper sx={{ margin: "auto" }}>

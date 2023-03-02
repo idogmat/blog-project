@@ -4,7 +4,7 @@ import { Flex } from "../../ui/Flex";
 import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { loadNewBlogs, setBlogs } from "../../store/thunks/blogsThunks";
+import { loadNewBlogs, setBlogs } from "./thunks/blogsThunks";
 import {
   appStateSelector,
   authStateSelector,
@@ -14,11 +14,7 @@ import { BlogsElement } from "./BlogsElement";
 import { Search } from "../../ui/Search";
 import { Select } from "../../ui/Selector";
 import { useDebounce } from "../../utils/hooks/useDebounce";
-import { Route, Routes, useParams } from "react-router-dom";
-import { LayoutCurrenBlog } from "./LayoutCurrenBlog";
-import { Preloader } from "../../ui/Preloader";
-import { Modal } from "../../ui/Modal/Modal";
-import { ModalBase } from "../../ui/Modal/ModalBase";
+import { useParams } from "react-router-dom";
 import { AddNewBlog } from "./Modals/AddNewBlog";
 
 type SortType = "0" | "asc" | "desc";
@@ -39,13 +35,13 @@ export const Blogs = () => {
   const { items, totalCount, pagesCount, page, pageSize } =
     useAllSelector(blogsStateSelector);
   const { isLoading } = useAllSelector(appStateSelector);
-  const { isAdmin } = useAllSelector(authStateSelector);
+  const { isAdmin, isInitialized } = useAllSelector(authStateSelector);
 
   const [search, setSearch] = useState<string>("");
   // const [sort, setSort] = useState<any>(selectOptions[0].UIValue);
   const [pageAndSize, setPageAndSize] = useState<IFetchType>({
-    pageNumber: page,
-    pageSize: pageSize,
+    pageNumber: 1,
+    pageSize: 10,
     sortDirection: "0",
     searchNameTerm: search,
   });
@@ -84,43 +80,37 @@ export const Blogs = () => {
 
   return (
     <ContentForm fDirection={"column"} bgColor={"#faf7f8"}>
-      {isLoading ? (
-        <Preloader />
-      ) : (
-        <>
-          <Flex
-            fDirection={"column"}
-            sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
-          >
-            <Typography variant={"title"}>Blogs</Typography>
+      <Flex
+        fDirection={"column"}
+        sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
+      >
+        <Typography variant={"title"}>Blogs</Typography>
+      </Flex>
+      <Flex>
+        <AddNewBlog isOpen={open} handleClose={() => setModal(false)} />
+        <Search value={search} onChange={searchWithDelay} />
+        <Select
+          onChange={setSort}
+          selected={pageAndSize.sortDirection}
+          options={selectOptions}
+        />
+        {isAdmin && (
+          <Flex fDirection={"row"} justify={"end"}>
+            <Button onClick={handleOpenModal}>Add blog</Button>
           </Flex>
-          <Flex>
-            <AddNewBlog isOpen={open} handleClose={() => setModal(false)} />
-            <Search value={search} onChange={searchWithDelay} />
-            <Select
-              onChange={setSort}
-              selected={pageAndSize.sortDirection}
-              options={selectOptions}
-            />
-            {isAdmin && (
-              <Flex fDirection={"row"} justify={"end"}>
-                <Button onClick={handleOpenModal}>Add blog</Button>
-              </Flex>
-            )}
-          </Flex>
-          <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
-            {Object.keys(items).map((k) => {
-              return <BlogsElement key={items[k].id} {...items[k]} />;
-            })}
-          </Flex>
-          <Button
-            disabled={!(checkSize && pagesCount !== page + 1)}
-            onClick={HandlerLoadNewBlogs}
-          >
-            ShowMore
-          </Button>
-        </>
-      )}
+        )}
+      </Flex>
+      <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
+        {Object.keys(items).map((k) => {
+          return <BlogsElement key={k} {...items[k]} />;
+        })}
+      </Flex>
+      <Button
+        disabled={!(checkSize && pagesCount !== page + 1)}
+        onClick={HandlerLoadNewBlogs}
+      >
+        ShowMore
+      </Button>
     </ContentForm>
   );
 };

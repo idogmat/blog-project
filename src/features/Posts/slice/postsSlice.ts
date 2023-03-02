@@ -1,22 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { setPosts } from "../thunks/postsThunks";
+import { createSlice } from "@reduxjs/toolkit";
+import { setPosts } from "../thanks/postsThunks";
+import { IState } from "../types";
 
-export interface IPost {
-  id: string;
-  blogId: string;
-  content: string;
-  shortDescription: string;
-  title: string;
-  blogName: string;
-  createdAt: string;
-}
-interface IState {
-  pagesCount: number;
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  items: IPost[];
-}
 const initialState: IState = {
   pagesCount: 1,
   page: 1,

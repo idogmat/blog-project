@@ -1,16 +1,16 @@
 import { FC } from "react";
-import { Blogs } from "../../components/Blogs/Blogs";
-import { Login } from "../../components/Login/Login";
-import { Posts } from "../../components/Posts/Posts";
-import { LayoutCurrenPost } from "../../components/Posts/LayoutCurrenPost";
-import { LayoutCurrenBlog } from "../../components/Blogs/LayoutCurrenBlog";
+import { Blogs } from "../../features/Blogs/Blogs";
+import { Login } from "../../features/Login/Login";
+import { Posts } from "../../features/Posts/Posts";
+import { LayoutCurrenPost } from "../../features/Posts/LayoutCurrenPost";
+import { LayoutCurrenBlog } from "../../features/Blogs/LayoutCurrenBlog";
 import { NotFound } from "../components/NotFound";
-import { Registration } from "../../components/Registration/Registration";
-import { ConfirmEmail } from "../../components/ConfirmEmail/ConfirmEmail";
-import { ForgotPassword } from "../../components/ForgotPassword/ForgotPassword";
-import { RecoveryForm } from "../../components/ForgotPassword/RecoveryForm";
-import { CreateNewPassword } from "../../components/ForgotPassword/CreateNewPassword";
-import { SetNewPassword } from "../../components/ForgotPassword/SetNewPassword";
+import { Registration } from "../../features/Registration/Registration";
+import { ConfirmEmail } from "../../features/ConfirmEmail/ConfirmEmail";
+import { ForgotPassword } from "../../features/ForgotPassword/ForgotPassword";
+import { RecoveryForm } from "../../features/ForgotPassword/RecoveryForm";
+import { CreateNewPassword } from "../../features/ForgotPassword/CreateNewPassword";
+import { SetNewPassword } from "../../features/ForgotPassword/SetNewPassword";
 
 export interface IRoute {
   path: string;

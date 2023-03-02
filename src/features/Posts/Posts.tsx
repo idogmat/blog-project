@@ -6,7 +6,7 @@ import { ContentForm } from "../../ui/ContentForm";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
 import { appStateSelector, postsStateSelector } from "../../store/selectors";
 import { PostElement } from "./PostElement";
-import { setPosts } from "../../store/thunks/postsThunks";
+import { setPosts } from "./thanks/postsThunks";
 import { Preloader } from "../../ui/Preloader";
 import { Select } from "../../ui/Selector";
 type SortType = "0" | "asc" | "desc";

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Flex } from "../../ui/Flex";
 import { Image } from "../../ui/Image";
 import { Typography } from "../../ui/Typography";
-import { IPost } from "../../store/slicers/postsSlice";
+import { IPost } from "./types";
 import { NavLink } from "react-router-dom";
 
 export const PostElement: FC<IPost> = ({

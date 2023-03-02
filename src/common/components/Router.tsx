@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { RoutePaths, RoutesEnum } from "../common/routes";
+import { RoutePaths, RoutesEnum } from "../routes";
 import React from "react";
 
-export const Router = (props: { isLogged: boolean }) => {
-  return props.isLogged ? (
+export const Router = (props: { isAuth: boolean }) => {
+  return props.isAuth ? (
     <Routes>
       {RoutePaths.map(
         (route) =>
