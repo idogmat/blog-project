@@ -1,25 +1,25 @@
-import React, { useState } from "react";
-import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { authStateSelector } from "../../store/selectors";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { FormikProps, useFormik } from "formik";
-import {
-  LoginContent,
-  LoginForm,
-  LoginOffer,
-  LoginWrapper,
-} from "../../ui/LoginForm";
-import { Paper } from "../../ui/Paper";
+import React from "react";
+import { LoginContent, LoginWrapper } from "../../ui/LoginForm";
 import { Typography } from "../../ui/Typography";
-import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
-
-import * as yup from "yup";
 import verificationEmail from "../../assets/svg/verification.svg";
 import { Flex } from "../../ui/Flex";
+import { useAllSelector, useAppDispatch } from "../../utils/hooks";
+import { recoveryEmailStateSelector } from "../../store/selectors";
+import { recoveryThunk } from "./thanks/recoveryThunk";
+import { useNavigate } from "react-router-dom";
+import { RoutesEnum } from "../../common/routes";
 
-export const VerificationLinkExpired = () => {
+export const VerificationLinkExpired = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+  // const email = useAllSelector(recoveryEmailStateSelector);
+  const email = localStorage.getItem("ele");
+  console.log(email);
+  const navigate = useNavigate();
+  const sendEmail = (): void => {
+    !!email && dispatch(recoveryThunk(email));
+    // navigate("/" + RoutesEnum.LOGIN);
+  };
   return (
     <LoginWrapper
       sx={{ margin: "auto", display: "flex", flexDirection: "column" }}
@@ -44,7 +44,11 @@ export const VerificationLinkExpired = () => {
             The link has been sent by email. If you don’t receive an email, send
             link again
           </Typography>
-          <Button bColor={"#fff"} sx={{ display: "flex", margin: "auto" }}>
+          <Button
+            onClick={sendEmail}
+            bColor={"#fff"}
+            sx={{ display: "flex", margin: "auto" }}
+          >
             Resend verification link
           </Button>
         </Flex>

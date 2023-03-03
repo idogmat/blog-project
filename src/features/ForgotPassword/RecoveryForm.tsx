@@ -1,30 +1,39 @@
 import React, { useState } from "react";
-import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { authStateSelector } from "../../store/selectors";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { FormikProps, useFormik } from "formik";
-import {
-  LoginContent,
-  LoginForm,
-  LoginOffer,
-  LoginWrapper,
-} from "../../ui/LoginForm";
-import { Paper } from "../../ui/Paper";
+import { useAllSelector } from "../../utils/hooks";
+import { recoveryEmailStateSelector } from "../../store/selectors";
+import { useNavigate } from "react-router-dom";
 import { Typography } from "../../ui/Typography";
-import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
-
-import * as yup from "yup";
-import { VerificationLinkExpired } from "./VerificationLinkExpired";
 import { ForgotPassword } from "./ForgotPassword";
-import { CreateNewPassword } from "./CreateNewPassword";
+import { ModalBase } from "../../ui/Modal/ModalBase";
+import { Flex } from "../../ui/Flex";
 
-export const RecoveryForm = () => {
+export const RecoveryForm = (): JSX.Element => {
   // Local State
   const [sent, setSent] = useState(false);
-  // Formik
-  const navigate = useNavigate();
 
-  return sent ? <div>message sent</div> : <ForgotPassword setSent={setSent} />;
+  const navigate = useNavigate();
+  const email = useAllSelector(recoveryEmailStateSelector);
+  const navToLogin = (): void => {
+    navigate(-1);
+  };
+  return sent ? (
+    <ModalBase
+      handleClose={() => setSent(false)}
+      modalTitle="Email sent"
+      open={sent}
+    >
+      <Flex
+        fDirection={"column"}
+        sx={{ padding: "0.6rem", minWidth: "22.5rem" }}
+      >
+        <Typography>
+          We have sent a link to confirm your email to {email}
+        </Typography>
+        <Button onClick={navToLogin}>OK</Button>
+      </Flex>
+    </ModalBase>
+  ) : (
+    <ForgotPassword setSent={setSent} />
+  );
 };

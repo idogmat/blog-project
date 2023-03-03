@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setPosts } from "../thanks/postsThunks";
-import { IState } from "../types";
+import { IStatePosts } from "../types";
 
-const initialState: IState = {
+const initialState: IStatePosts = {
   pagesCount: 1,
   page: 1,
   pageSize: 10,

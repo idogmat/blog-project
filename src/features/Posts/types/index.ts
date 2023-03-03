@@ -7,7 +7,7 @@ export interface IPost {
   blogName: string;
   createdAt: string;
 }
-export interface IState {
+export interface IStatePosts {
   pagesCount: number;
   page: number;
   pageSize: number;

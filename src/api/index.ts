@@ -1,8 +1,8 @@
-import { IBlog } from "../features/Blogs/slice/blogsSlice";
-import axios from "axios";
-import { IRegisterFields } from "../store/thunks/authThunk";
 import { AdminInstance, API_URL, instance } from "./instance";
 import { ILogin } from "./typse";
+import { IRegisterFields } from "../features/Registration/types";
+import axios from "axios";
+import { IBlog } from "../features/Blogs/types";
 
 export const authAPI = {
   authMe: (accessToken: string) => {
@@ -31,7 +31,7 @@ export const authAPI = {
     });
   },
   setNewPassword: (fields: { newPassword: string; recoveryCode: string }) => {
-    return instance.post("auth/new-password", fields);
+    return axios.post(`${API_URL}auth/new-password`, fields);
   },
 
   login: (fields: ILogin) => {
@@ -41,7 +41,7 @@ export const authAPI = {
     return instance.post("/auth/logout", {});
   },
 };
-interface ISetRequest {
+export interface ISetRequest {
   pageNumber: number;
   pageSize: number;
   sortDirection: string;

@@ -6,19 +6,19 @@ import {
   LoginWrapper,
 } from "../../ui/LoginForm";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { appStateSelector, authStateSelector } from "../../store/selectors";
+import { authStateSelector } from "../../store/selectors";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
-import { IRegisterFields, login, register } from "../../store/thunks/authThunk";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Paper } from "../../ui/Paper";
 import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { Input } from "../../ui/Input";
 import loginImg from "../../assets/svg/login.svg";
-import { RoutePaths, RoutesEnum } from "../../common/routes";
-import { withAuthentication } from "../../common/routes/hoc";
+import { RoutesEnum } from "../../common/routes";
+import { IRegisterFields } from "./types";
+import { register } from "./thunks/registration";
 
 export const basicSchema = yup.object().shape({
   email: yup.string().email(),
@@ -29,15 +29,14 @@ export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
 
-export const Registration = () => {
+export const Registration = (): JSX.Element => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
   // Local State
-  const { isLogged } = useAllSelector(authStateSelector);
+  const { isAuth } = useAllSelector(authStateSelector);
   const [showPassword, setShowPassword] = useState(false);
   const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
-  const navigate = useNavigate();
   const loginForm = useFormik({
     initialValues: {
       login: "",
@@ -54,11 +53,11 @@ export const Registration = () => {
   const loginHasError = hasError.bind(null, loginForm);
 
   // Utils
-  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+  const changePasswordFieldType = (): void => setShowPassword((prev) => !prev);
 
   return (
     <>
-      {isLogged ? (
+      {isAuth ? (
         <Navigate to={"/" + RoutesEnum.BLOGS} />
       ) : (
         <LoginWrapper sx={{ margin: "auto" }}>

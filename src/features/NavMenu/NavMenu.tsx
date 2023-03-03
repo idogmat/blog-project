@@ -5,7 +5,7 @@ import { filterLinks, RoutePaths } from "../../common/routes";
 import { useAllSelector } from "../../utils/hooks";
 import { authStateSelector } from "../../store/selectors";
 
-export const NavMenu = () => {
+export const NavMenu = (): JSX.Element => {
   const { isAuth } = useAllSelector(authStateSelector);
   return (
     <>

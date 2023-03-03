@@ -5,5 +5,5 @@ export const Navigate = styled.ul`
   flex-direction: column;
   padding-top: 15px;
   height: 80px;
-  width: 250px;
+  width: 200px;
 `;

@@ -1,4 +1,4 @@
-import { AppAC } from "../../../store/slicers/appSlice";
+import { AppAC } from "../../../app/slice/appSlice";
 import { createAppAsyncThunk } from "../../../store/type";
 import { errorHandlingThunk } from "../../../utils/errorHandling";
 import { authAPI } from "../../../api";
@@ -14,6 +14,7 @@ export const recoveryThunk = createAppAsyncThunk(
             message: "Check your email",
           })
         );
+
         return field;
       }
     });

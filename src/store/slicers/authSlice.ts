@@ -1,7 +1,9 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { authMe, login } from "../thunks/authThunk";
-import { IBlog } from "../../features/Blogs/slice/blogsSlice";
+import { createSlice } from "@reduxjs/toolkit";
 import { recoveryThunk } from "../../features/ForgotPassword/thanks/recoveryThunk";
+import { login } from "../../features/Login/thunks/login";
+import { authMe } from "../../features/Login/thunks/authMe";
+import { logout } from "../../features/Header/thunks/logout";
+import { setNewPassword } from "../../features/ForgotPassword/thanks/setNewPasswordThunk";
 
 export interface IAuthState {
   isAuth: boolean;
@@ -9,6 +11,7 @@ export interface IAuthState {
   accessToken: string | null;
   isInitialized: boolean;
   recoveryEmail: string;
+  recoveryForExpired: boolean;
   user: {
     login: string;
     email: string;
@@ -22,6 +25,7 @@ const initialState: IAuthState = {
   isAdmin: false,
   isInitialized: false,
   recoveryEmail: "",
+  recoveryForExpired: false,
 };
 
 const authSlice = createSlice({
@@ -38,6 +42,14 @@ const authSlice = createSlice({
         ...state,
         accessToken: action.payload.accessToken,
         isAuth: true,
+      };
+    });
+    builder.addCase(logout.fulfilled, (state, action) => {
+      return {
+        ...state,
+        accessToken: null,
+        user: null,
+        isAuth: action.payload,
       };
     });
     builder.addCase(authMe.fulfilled, (state, action) => {
@@ -64,6 +76,13 @@ const authSlice = createSlice({
         recoveryEmail: action.meta.arg,
       };
     });
+    builder.addCase(setNewPassword.rejected, (state, action) => {
+      return {
+        ...state,
+        recoveryForExpired: true,
+      };
+    });
+
     //     .addCase(authMeTC.fulfilled, (state, action) => {
     //         state.isAuth = true;
     //     });

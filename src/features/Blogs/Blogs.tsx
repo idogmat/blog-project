@@ -16,27 +16,29 @@ import { Select } from "../../ui/Selector";
 import { useDebounce } from "../../utils/hooks/useDebounce";
 import { useParams } from "react-router-dom";
 import { AddNewBlog } from "./Modals/AddNewBlog";
+import { Preloader } from "../../ui/Preloader";
 
 type SortType = "0" | "asc" | "desc";
+
 interface IFetchType {
   pageNumber: number;
   pageSize: number;
   sortDirection: SortType;
   searchNameTerm: string;
 }
+
 export const selectOptions = {
   ["0"]: "Old blogs first",
   ["asc"]: "From A to Z",
   ["desc"]: "From Z to A",
 };
-export const Blogs = () => {
+export const Blogs = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const [open, setModal] = useState(false);
   const { items, totalCount, pagesCount, page, pageSize } =
     useAllSelector(blogsStateSelector);
-  const { isLoading } = useAllSelector(appStateSelector);
   const { isAdmin, isInitialized } = useAllSelector(authStateSelector);
-
+  const { isLoading } = useAllSelector(appStateSelector);
   const [search, setSearch] = useState<string>("");
   // const [sort, setSort] = useState<any>(selectOptions[0].UIValue);
   const [pageAndSize, setPageAndSize] = useState<IFetchType>({
@@ -51,10 +53,10 @@ export const Blogs = () => {
     dispatch(setBlogs(pageAndSize));
   }, [pageAndSize]);
   const { id } = useParams();
-  const handleOpenModal = () => {
+  const handleOpenModal = (): void => {
     setModal((modal) => !modal);
   };
-  const HandlerLoadNewBlogs = () => {
+  const HandlerLoadNewBlogs = (): void => {
     if (checkSize && pagesCount !== page + 1) {
       dispatch(
         loadNewBlogs({
@@ -69,48 +71,54 @@ export const Blogs = () => {
     (e) => setPageAndSize((state) => ({ ...state, searchNameTerm: e })),
     700
   );
-  const searchWithDelay = (e: string) => {
+  const searchWithDelay = (e: string): void => {
     setSearch(e);
     setSearchOnFetch(e);
   };
 
-  const setSort = (o: SortType) => {
+  const setSort = (o: SortType): void => {
     setPageAndSize((state) => ({ ...state, sortDirection: o }));
   };
 
   return (
     <ContentForm fDirection={"column"} bgColor={"#faf7f8"}>
-      <Flex
-        fDirection={"column"}
-        sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
-      >
-        <Typography variant={"title"}>Blogs</Typography>
-      </Flex>
-      <Flex>
-        <AddNewBlog isOpen={open} handleClose={() => setModal(false)} />
-        <Search value={search} onChange={searchWithDelay} />
-        <Select
-          onChange={setSort}
-          selected={pageAndSize.sortDirection}
-          options={selectOptions}
-        />
-        {isAdmin && (
-          <Flex fDirection={"row"} justify={"end"}>
-            <Button onClick={handleOpenModal}>Add blog</Button>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <>
+          <Flex
+            fDirection={"column"}
+            sx={{ borderBottom: "1px solid black", margin: "1rem 0" }}
+          >
+            <Typography variant={"title"}>Blogs</Typography>
           </Flex>
-        )}
-      </Flex>
-      <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
-        {Object.keys(items).map((k) => {
-          return <BlogsElement key={k} {...items[k]} />;
-        })}
-      </Flex>
-      <Button
-        disabled={!(checkSize && pagesCount !== page + 1)}
-        onClick={HandlerLoadNewBlogs}
-      >
-        ShowMore
-      </Button>
+          <Flex>
+            <AddNewBlog isOpen={open} handleClose={() => setModal(false)} />
+            <Search value={search} onChange={searchWithDelay} />
+            <Select
+              onChange={setSort}
+              selected={pageAndSize.sortDirection}
+              options={selectOptions}
+            />
+            {isAdmin && (
+              <Flex fDirection={"row"} justify={"end"}>
+                <Button onClick={handleOpenModal}>Add blog</Button>
+              </Flex>
+            )}
+          </Flex>
+          <Flex fDirection={"column"} sx={{ borderTop: "1px solid black" }}>
+            {Object.keys(items).map((k) => {
+              return <BlogsElement key={k} {...items[k]} />;
+            })}
+          </Flex>
+          <Button
+            disabled={!(checkSize && pagesCount !== page + 1)}
+            onClick={HandlerLoadNewBlogs}
+          >
+            ShowMore
+          </Button>
+        </>
+      )}
     </ContentForm>
   );
 };

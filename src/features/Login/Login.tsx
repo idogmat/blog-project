@@ -10,7 +10,7 @@ import { authStateSelector } from "../../store/selectors";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as yup from "yup";
 import { FormikProps, useFormik } from "formik";
-import { login } from "../../store/thunks/authThunk";
+import { login } from "./thunks/login";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Paper } from "../../ui/Paper";
 import { Typography } from "../../ui/Typography";
@@ -27,7 +27,7 @@ export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
   // Dispatch & selectors
   const dispatch = useAppDispatch();
   // Local State
@@ -35,7 +35,6 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const passwordIcon = showPassword ? <MdVisibility /> : <MdVisibilityOff />;
   // Formik
-  const navigate = useNavigate();
   const loginForm = useFormik({
     initialValues: {
       loginOrEmail: "",
@@ -51,7 +50,7 @@ export const Login = () => {
   const loginHasError = hasError.bind(null, loginForm);
 
   // Utils
-  const changePasswordFieldType = () => setShowPassword((prev) => !prev);
+  const changePasswordFieldType = (): void => setShowPassword((prev) => !prev);
 
   return (
     <>
@@ -119,7 +118,7 @@ export const Login = () => {
 
                 <LoginOffer>
                   <Typography variant={"sub-title-md"} as={"span"}>
-                    Haven't account?
+                    Haven`&apos;`t account?
                   </Typography>
                   <Typography
                     underline

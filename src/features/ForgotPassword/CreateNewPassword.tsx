@@ -1,25 +1,17 @@
-import React, { useState } from "react";
-import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { authStateSelector } from "../../store/selectors";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useAppDispatch } from "../../utils/hooks";
+import { Navigate } from "react-router-dom";
 import { FormikProps, useFormik } from "formik";
-import {
-  LoginContent,
-  LoginForm,
-  LoginOffer,
-  LoginWrapper,
-} from "../../ui/LoginForm";
+import { LoginContent, LoginForm, LoginWrapper } from "../../ui/LoginForm";
 import { Paper } from "../../ui/Paper";
 import { Typography } from "../../ui/Typography";
 import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
 
 import * as yup from "yup";
-import verificationEmail from "../../assets/svg/verification.svg";
-import { Flex } from "../../ui/Flex";
-import { recoveryThunk } from "./thanks/recoveryThunk";
 import { setNewPassword } from "./thanks/setNewPasswordThunk";
+import { ICreate } from "./types";
+import { RoutesEnum } from "../../common/routes";
 
 const basicSchema = yup.object().shape({
   password: yup.string().required().min(6),
@@ -33,13 +25,9 @@ const basicSchema = yup.object().shape({
 export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
-interface ICreate {
-  setCode: (b: boolean) => void;
-  code: string | undefined;
-}
+
 export const CreateNewPassword: React.FC<ICreate> = ({ code, setCode }) => {
   const dispatch = useAppDispatch();
-
   const loginForm = useFormik({
     initialValues: {
       password: "",
@@ -47,16 +35,17 @@ export const CreateNewPassword: React.FC<ICreate> = ({ code, setCode }) => {
     },
     validationSchema: basicSchema,
     onSubmit: (values: { password: string }) => {
-      code &&
+      !!code &&
         dispatch(
           setNewPassword({ newPassword: values.password, recoveryCode: code })
         );
     },
   });
-
   // Utils
   const emailHasError = hasError.bind(null, loginForm);
-
+  if (code === undefined) {
+    return <Navigate to={"/" + RoutesEnum.LOGIN} />;
+  }
   return (
     <LoginWrapper sx={{ margin: "auto" }}>
       <LoginContent>

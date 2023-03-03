@@ -1,47 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  addBlog,
-  loadNewBlogs,
-  setBlogs,
-  setPostsForBlog,
-} from "../thunks/blogsThunks";
+import { createSlice } from "@reduxjs/toolkit";
+import { loadNewBlogs, setBlogs } from "../thunks/blogsThunks";
+import { IBlog, IStateBlogs } from "../types";
 
-export interface IPostsInBlog {
-  blogId: string;
-  blogName: string;
-  content: string;
-  createdAt: string;
-  extendedLikesInfo: {
-    likesCount: number;
-    dislikesCount: number;
-    myStatus: string;
-    newestLikes: any[];
-  };
-  id: string;
-  shortDescription: string;
-  title: string;
-}
-
-export interface IBlog {
-  id: string;
-  description: string;
-  websiteUrl: string;
-  name: string;
-  createdAt: string;
-  posts: IPostsInBlog[];
-}
-
-interface IState {
-  page: number;
-  pageSize: number;
-  pagesCount: number;
-  totalCount: number;
-  items: {
-    [key: string]: IBlog;
-  };
-}
-
-const initialState: IState = {
+const initialState: IStateBlogs = {
   page: 1,
   pageSize: 10,
   pagesCount: 4,

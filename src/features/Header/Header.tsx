@@ -5,12 +5,15 @@ import { Button } from "../../ui/Button";
 import { RiLogoutBoxRFill } from "react-icons/ri";
 import { Typography } from "../../ui/Typography";
 import { authAPI } from "../../api";
-import { useAllSelector } from "../../utils/hooks";
+import { useAllSelector, useAppDispatch } from "../../utils/hooks";
+import { logout } from "./thunks/logout";
 
-export const Header = () => {
+export const Header = (): JSX.Element => {
   const user = useAllSelector((state) => state.auth.user);
-  const logout = () => {
-    console.log(authAPI.logout());
+  const dispatch = useAppDispatch();
+  const isLogged = !!user;
+  const logoutHandler = (): void => {
+    dispatch(logout());
   };
   return (
     <HeaderWrapper>
@@ -23,17 +26,20 @@ export const Header = () => {
           <Typography variant={"title"}>Blogger Platform</Typography>
           <Typography>Superadmin</Typography>
         </Flex>
-
-        <Flex sx={{ margin: "auto 1rem", gap: "1rem" }}>
-          <Typography>{!!user ? user.email : "UserName"}</Typography>
-          <Button
-            onClick={logout}
-            semantic
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <RiLogoutBoxRFill /> <Typography>Logout</Typography>
-          </Button>
-        </Flex>
+        {isLogged ? (
+          <Flex sx={{ margin: "auto 1rem", gap: "1rem" }}>
+            <Typography>{isLogged ? user.email : ""}</Typography>
+            <Button
+              onClick={logoutHandler}
+              semantic
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <RiLogoutBoxRFill /> <Typography>Logout</Typography>
+            </Button>
+          </Flex>
+        ) : (
+          ""
+        )}
       </Flex>
     </HeaderWrapper>
   );

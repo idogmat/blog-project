@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { authStateSelector } from "../../store/selectors";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useAppDispatch } from "../../utils/hooks";
+import { Link } from "react-router-dom";
 import { FormikProps, useFormik } from "formik";
 import {
   LoginContent,
@@ -37,6 +35,7 @@ export const ForgotPassword: React.FC<IForgotPwd> = ({ setSent }) => {
     validationSchema: basicSchema,
     onSubmit: (values: { email: string }) => {
       dispatch(recoveryThunk(values.email));
+      localStorage.setItem("ele", values.email.toString());
       setSent(true);
     },
   });

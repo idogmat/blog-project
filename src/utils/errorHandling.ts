@@ -1,6 +1,9 @@
-import { AppAC } from "../store/slicers/appSlice";
+import { AppAC } from "../app/slice/appSlice";
 
-export const errorHandlingThunk = async (thunkAPI: any, logic: Function) => {
+export const errorHandlingThunk = async (
+  thunkAPI: any,
+  logic: () => any
+): Promise<any> => {
   thunkAPI.dispatch(AppAC.setIsLoading({ isLoading: true }));
   try {
     return await logic();
