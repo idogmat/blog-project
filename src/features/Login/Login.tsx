@@ -118,7 +118,7 @@ export const Login = (): JSX.Element => {
 
                 <LoginOffer>
                   <Typography variant={"sub-title-md"} as={"span"}>
-                    Haven`&apos;`t account?
+                    {"Haven't account?"}
                   </Typography>
                   <Typography
                     underline

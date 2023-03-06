@@ -15,6 +15,7 @@ import { Button } from "../../ui/Button";
 
 import * as yup from "yup";
 import { recoveryThunk } from "./thanks/recoveryThunk";
+import { modalAC } from "../../modals/slicer/modalsSlicer";
 
 export const basicSchema = yup.object().shape({
   email: yup.string().email().required("Email must be a valid"),
@@ -22,10 +23,8 @@ export const basicSchema = yup.object().shape({
 export function hasError(form: FormikProps<any>, prop: string): boolean {
   return !!form.errors[prop] && !!form.touched[prop];
 }
-interface IForgotPwd {
-  setSent: (v: boolean) => void;
-}
-export const ForgotPassword: React.FC<IForgotPwd> = ({ setSent }) => {
+
+export const ForgotPassword = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const loginForm = useFormik({
@@ -36,7 +35,6 @@ export const ForgotPassword: React.FC<IForgotPwd> = ({ setSent }) => {
     onSubmit: (values: { email: string }) => {
       dispatch(recoveryThunk(values.email));
       localStorage.setItem("ele", values.email.toString());
-      setSent(true);
     },
   });
 

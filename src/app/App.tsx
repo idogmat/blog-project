@@ -10,9 +10,12 @@ import { authStateSelector } from "../store/selectors";
 import { Preloader } from "../ui/Preloader";
 import { initializeApp } from "./thunks/initializeApp";
 
+import { createPortal } from "react-dom";
+
 function App(): JSX.Element {
   const { isInitialized, isAuth } = useAllSelector(authStateSelector);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(
       initializeApp({ accessToken: `${localStorage.getItem("accessToken")}` })

@@ -8,8 +8,6 @@ import { NotFound } from "../components/NotFound";
 import { Registration } from "../../features/Registration/Registration";
 import { ConfirmEmail } from "../../features/ConfirmEmail/ConfirmEmail";
 import { ForgotPassword } from "../../features/ForgotPassword/ForgotPassword";
-import { RecoveryForm } from "../../features/ForgotPassword/RecoveryForm";
-import { CreateNewPassword } from "../../features/ForgotPassword/CreateNewPassword";
 import { SetNewPassword } from "../../features/ForgotPassword/SetNewPassword";
 
 export interface IRoute {
@@ -52,7 +50,7 @@ export const RoutePaths: IRoute[] = [
   },
   {
     path: RoutesEnum.FORGOT_PASSWORD,
-    component: RecoveryForm,
+    component: ForgotPassword,
     isLayout: false,
     isLogged: false,
   },

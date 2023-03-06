@@ -3,6 +3,7 @@ import { createAppAsyncThunk } from "../../../store/type";
 import { errorHandlingThunk } from "../../../utils/errorHandling";
 import { authAPI } from "../../../api";
 import { AxiosError } from "axios";
+import { modalAC } from "../../../modals/slicer/modalsSlicer";
 
 export const setNewPassword = createAppAsyncThunk(
   "auth/setNewPassword",
@@ -12,12 +13,13 @@ export const setNewPassword = createAppAsyncThunk(
   ) => {
     try {
       const res = await authAPI.setNewPassword(param);
-      if (res.data.success) {
+      if (res.status === 204) {
         dispatch(
           AppAC.setSuccessMessage({
             message: "Check your email",
           })
         );
+        dispatch(modalAC.modalNewPassword(true));
         return res.data.success;
       }
     } catch (e: any) {
