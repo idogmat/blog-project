@@ -4,7 +4,7 @@ import { Flex } from "../../ui/Flex";
 import { Typography } from "../../ui/Typography";
 import { Button } from "../../ui/Button";
 import { useAllSelector, useAppDispatch } from "../../utils/hooks";
-import { loadNewBlogs, setBlogs } from "./thunks/blogsThunks";
+import { clearBlogs, loadNewBlogs, setBlogs } from "./thunks/blogsThunks";
 import {
   appStateSelector,
   authStateSelector,
@@ -14,24 +14,11 @@ import { BlogsElement } from "./BlogsElement";
 import { Search } from "../../ui/Search";
 import { Select } from "../../ui/Selector";
 import { useDebounce } from "../../utils/hooks/useDebounce";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { AddNewBlog } from "./Modals/AddNewBlog";
 import { Preloader } from "../../ui/Preloader";
+import { IFetchType, selectOptions, SortType } from "./types";
 
-type SortType = "0" | "asc" | "desc";
-
-interface IFetchType {
-  pageNumber: number;
-  pageSize: number;
-  sortDirection: SortType;
-  searchNameTerm: string;
-}
-
-export const selectOptions = {
-  ["0"]: "Old blogs first",
-  ["asc"]: "From A to Z",
-  ["desc"]: "From Z to A",
-};
 export const Blogs = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const [open, setModal] = useState(false);
@@ -41,34 +28,47 @@ export const Blogs = (): JSX.Element => {
   const { isLoading } = useAllSelector(appStateSelector);
   const [search, setSearch] = useState<string>("");
   // const [sort, setSort] = useState<any>(selectOptions[0].UIValue);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
+
   const [pageAndSize, setPageAndSize] = useState<IFetchType>({
-    pageNumber: 1,
-    pageSize: 10,
+    pageNumber: "1",
+    pageSize: "10",
     sortDirection: "0",
     searchNameTerm: search,
   });
+  console.log(params);
   const checkSize =
-    page + 1 === pageSize ? totalCount - Object.keys(items).length : pageSize;
+    page === pageSize ? totalCount - Object.keys(items).length : pageSize;
   useEffect(() => {
-    dispatch(setBlogs(pageAndSize));
-  }, [pageAndSize]);
-  const { id } = useParams();
+    dispatch(setBlogs(params));
+    // return () => dispatch(clearBlogs());
+  }, [searchParams]);
+
   const handleOpenModal = (): void => {
     setModal((modal) => !modal);
   };
-  const HandlerLoadNewBlogs = (): void => {
-    if (checkSize && pagesCount !== page + 1) {
-      dispatch(
-        loadNewBlogs({
-          ...pageAndSize,
-          pageNumber: page + 1,
-          pageSize: checkSize,
-        })
-      );
+  const handlerLoadNewBlogs = (): void => {
+    if (page <= pagesCount) {
+      // dispatch(
+      //   loadNewBlogs({
+      //     ...params,
+      //     pageNumber: (page + 1).toString(),
+      //   })
+      // );
+
+      setSearchParams({
+        ...params,
+        pageNumber: (page + 1).toString(),
+      });
     }
   };
   const setSearchOnFetch = useDebounce(
-    (e) => setPageAndSize((state) => ({ ...state, searchNameTerm: e })),
+    (e) =>
+      setSearchParams({
+        ...params,
+        searchNameTerm: e,
+      }),
     700
   );
   const searchWithDelay = (e: string): void => {
@@ -77,7 +77,13 @@ export const Blogs = (): JSX.Element => {
   };
 
   const setSort = (o: SortType): void => {
-    setPageAndSize((state) => ({ ...state, sortDirection: o }));
+    setSearchParams({
+      ...params,
+      sortDirection: o,
+      pageNumber: 1 + "",
+      pageSize: items.length + "",
+    }),
+      setPageAndSize((state) => ({ ...state, sortDirection: o }));
   };
 
   return (
@@ -111,10 +117,7 @@ export const Blogs = (): JSX.Element => {
               return <BlogsElement key={k} {...items[k]} />;
             })}
           </Flex>
-          <Button
-            disabled={!(checkSize && pagesCount !== page + 1)}
-            onClick={HandlerLoadNewBlogs}
-          >
+          <Button disabled={page > pagesCount} onClick={handlerLoadNewBlogs}>
             ShowMore
           </Button>
         </>

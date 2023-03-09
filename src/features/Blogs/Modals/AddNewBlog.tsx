@@ -3,9 +3,9 @@ import { ModalBase } from "../../../ui/Modal/ModalBase";
 import { Flex } from "../../../ui/Flex";
 import { Input } from "../../../ui/Input";
 import { Button } from "../../../ui/Button";
-import { FileLoader } from "../../../ui/FileLoader";
 import { useAppDispatch } from "../../../utils/hooks";
-import { blogsAPI } from "../../../api";
+import { blogsAPI } from "../api";
+
 interface IModal {
   handleClose: () => void;
   isOpen: boolean;
@@ -26,10 +26,10 @@ export const AddNewBlog: React.FC<IModal> = ({ isOpen, handleClose }) => {
   const changeField = (
     type: keyof INewBlog,
     e: ChangeEvent<HTMLInputElement>
-  ) => {
+  ): void => {
     setNewBlog((state) => ({ ...state, [type]: e.target.value }));
   };
-  const addBlog = () => {
+  const addBlog = (): void => {
     blogsAPI.addBlog(newBlogData);
   };
   return (

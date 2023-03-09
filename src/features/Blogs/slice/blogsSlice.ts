@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loadNewBlogs, setBlogs } from "../thunks/blogsThunks";
+import { clearBlogs, loadNewBlogs, setBlogs } from "../thunks/blogsThunks";
 import { IBlog, IStateBlogs } from "../types";
 
 const initialState: IStateBlogs = {
@@ -26,9 +26,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setBlogs.fulfilled, (state, action) => {
-      return { ...action.payload.data };
-    });
-    builder.addCase(loadNewBlogs.fulfilled, (state, action) => {
       const newItems = action.payload.data.items.reduce(
         (acc: { [key: string]: IBlog }, e: IBlog) => {
           acc[e.id] = e;
@@ -36,13 +33,15 @@ const authSlice = createSlice({
         },
         {}
       );
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...newItems,
-        },
+      // debugger;
+      const newState = {
+        ...action.payload.data,
+        items: { ...state.items, ...newItems },
       };
+      return newState;
+    });
+    builder.addCase(clearBlogs.fulfilled, (state, action) => {
+      return initialState;
     });
     // builder.addCase(setPostsForBlog.fulfilled, (state, action) => {
     //   if (action.payload.data) {

@@ -1,6 +1,7 @@
 import { createAppAsyncThunk } from "../../../store/type";
-import { blogsAPI, IBlogAPI, postsAPI } from "../../../api";
+
 import { errorHandlingThunk } from "../../../utils/errorHandling";
+import { postsAPI } from "../api";
 
 export const setPosts = createAppAsyncThunk(
   "blogs/setPosts",
@@ -27,10 +28,10 @@ export const setPosts = createAppAsyncThunk(
     });
   }
 );
-export const addPost = createAppAsyncThunk(
-  "blogs/addPost",
-  async (fields: IBlogAPI, thunkAPI) => {
-    const { data } = await blogsAPI.addBlog(fields);
-    return { blog: data.items };
-  }
-);
+// export const addPost = createAppAsyncThunk(
+//   "blogs/addPost",
+//   async (fields: IBlogAPI, thunkAPI) => {
+//     const { data } = await blogsAPI.addBlog(fields);
+//     return { blog: data.items };
+//   }
+// );

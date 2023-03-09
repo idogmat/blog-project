@@ -30,7 +30,7 @@ instance.interceptors.response.use(
         localStorage.setItem("accessToken", response.data.accessToken);
         return instance.request(originalRequest);
       } catch (e) {
-        console.log("und");
+        console.log("undefined");
         return null;
       }
     }

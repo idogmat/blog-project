@@ -32,3 +32,17 @@ export interface IStateBlogs {
     [key: string]: IBlog;
   };
 }
+export type IBlogAPI = Pick<IBlog, "name" | "description" | "websiteUrl">;
+
+export const selectOptions = {
+  ["0"]: "Old blogs first",
+  ["asc"]: "From A to Z",
+  ["desc"]: "From Z to A",
+};
+export type SortType = "0" | "asc" | "desc";
+export interface IFetchType {
+  pageNumber: string;
+  pageSize: string;
+  sortDirection: SortType;
+  searchNameTerm: string;
+}

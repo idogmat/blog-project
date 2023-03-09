@@ -14,3 +14,9 @@ export interface IStatePosts {
   totalCount: number;
   items: IPost[];
 }
+export type IPostAPI = {
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+};

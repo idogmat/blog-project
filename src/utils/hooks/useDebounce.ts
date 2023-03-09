@@ -3,21 +3,16 @@ import { useEffect, useRef } from "react";
 export function useDebounce<A extends any[]>(
   callback: (...args: A) => void,
   wait: number
-) {
-  const argsRef = useRef<A>();
+): (...args: A) => void {
   const timeout = useRef<ReturnType<typeof setTimeout>>();
 
-  const cleanup = () => {
-    if (timeout.current) clearTimeout(timeout.current);
-  };
-  useEffect(() => cleanup, []);
+  useEffect(() => clearTimeout(timeout.current), []);
 
   return function debouncedCallback(...args: A) {
-    argsRef.current = args;
-    cleanup();
+    clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
-      if (argsRef.current) {
-        callback(...argsRef.current);
+      if (args) {
+        callback(...args);
       }
     }, wait);
   };

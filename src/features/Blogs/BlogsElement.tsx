@@ -1,16 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Flex } from "../../ui/Flex";
 import { Image } from "../../ui/Image";
-import { IBlog } from "./slice/blogsSlice";
 import { Typography } from "../../ui/Typography";
 import { BiDotsVertical } from "react-icons/bi";
 import { Button } from "../../ui/Button";
 import { Dropdown } from "../../ui/Dropdown";
 import { useComponentVisible } from "../../utils/hooks/useComponentVisible";
-import { NavLink, useParams, useSearchParams } from "react-router-dom";
-import { setItemToLC } from "../../utils/localStorage";
-import { setPostsForBlog } from "./thunks/blogsThunks";
-import { useAppDispatch } from "../../utils/hooks";
+import { NavLink } from "react-router-dom";
+import { IBlog } from "./types";
 
 export const BlogsElement: FC<IBlog> = ({
   name,

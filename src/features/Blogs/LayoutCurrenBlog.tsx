@@ -9,10 +9,11 @@ import { setPostsForBlog } from "./thunks/blogsThunks";
 import { postsOnBlogStateSelector } from "../../store/selectors";
 import { ContentForm } from "../../ui/ContentForm";
 
-export const LayoutCurrenBlog = () => {
+export const LayoutCurrenBlog = (): JSX.Element => {
   const { backToState } = useLocation().state;
   const posts = useAllSelector(postsOnBlogStateSelector);
   const { id } = useParams();
+  console.log(id);
   const dispatch = useAppDispatch();
   useEffect(() => {
     id &&

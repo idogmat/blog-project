@@ -1,21 +1,13 @@
 import { createAppAsyncThunk } from "../../../store/type";
-import { blogsAPI, IBlogAPI } from "../../../api";
+
 import { errorHandlingThunk } from "../../../utils/errorHandling";
 import { blogsAC } from "../slice/blogsSlice";
-import { useAllSelector } from "../../../utils/hooks";
-import { blogsStateSelector } from "../../../store/selectors";
+import { blogsAPI } from "../api";
+import { IBlogAPI, IFetchType, selectOptions } from "../types";
 
 export const setBlogs = createAppAsyncThunk(
   "blogs/setBlogs",
-  async (
-    params: {
-      pageNumber: number;
-      pageSize: number;
-      sortDirection: string;
-      searchNameTerm: string;
-    },
-    thunkAPI
-  ) => {
+  async (params: Partial<IFetchType>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
       if (params.sortDirection === "0") {
         const { data } = await blogsAPI.getBlogs({
@@ -24,7 +16,6 @@ export const setBlogs = createAppAsyncThunk(
           pageSize: params.pageSize,
           sortBy: "createdAt",
         });
-
         return { data };
       } else {
         const { data } = await blogsAPI.getBlogs(params);
@@ -38,9 +29,9 @@ export const setPostsForBlog = createAppAsyncThunk(
   async (
     params: {
       id: string;
-      pageNumber: number;
-      pageSize: number;
-      sortDirection: string;
+      pageNumber: string;
+      pageSize: string;
+      sortDirection: keyof typeof selectOptions;
     },
     thunkAPI
   ) => {
@@ -59,13 +50,7 @@ export const setPostsForBlog = createAppAsyncThunk(
 );
 export const loadNewBlogs = createAppAsyncThunk(
   "blogs/loadNewBlogs",
-  async (
-    params: {
-      pageNumber: number;
-      pageSize: number;
-    },
-    thunkAPI
-  ) => {
+  async (params: Partial<IFetchType>, thunkAPI) => {
     return errorHandlingThunk(thunkAPI, async () => {
       const { pagesCount } = thunkAPI.getState().blogs;
       const { data } = await blogsAPI.getBlogs({
@@ -73,8 +58,16 @@ export const loadNewBlogs = createAppAsyncThunk(
         pageNumber: params.pageNumber,
         pageSize: params.pageSize,
       });
-      thunkAPI.dispatch(blogsAC.setPageBlogs({ page: params.pageNumber }));
+      thunkAPI.dispatch(blogsAC.setPageBlogs({ page: pagesCount + 1 }));
       return { data };
+    });
+  }
+);
+export const clearBlogs = createAppAsyncThunk(
+  "blogs/clearBlogs",
+  async (_, thunkAPI) => {
+    return errorHandlingThunk(thunkAPI, async () => {
+      return true;
     });
   }
 );
